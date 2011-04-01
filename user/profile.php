@@ -283,6 +283,15 @@ if ($user->aim && !isset($hiddenfields['aimid'])) {
 if ($user->msn && !isset($hiddenfields['msnid'])) {
     print_row(get_string('msnid').':', s($user->msn));
 }
+if ($user->idnumber && !isset($hiddenfields['idnumber'])) {
+    print_row(get_string('idnumber').':', s($user->idnumber));
+}
+if ($user->institution && !isset($hiddenfields['institution'])) {
+    print_row(get_string('institution').':', s($user->institution));
+}
+if ($user->department && !isset($hiddenfields['department'])) {
+    print_row(get_string('department').':', s($user->department));
+}
 
 /// Print the Custom User Fields
 profile_display_fields($user->id);
