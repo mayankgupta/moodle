@@ -155,6 +155,7 @@ abstract class page_wiki {
      */
     protected function setup_tabs($options = array()) {
         global $CFG, $PAGE;
+        $groupmode = groups_get_activity_groupmode($PAGE->cm);
 
         if (empty($CFG->usecomments) || !has_capability('mod/wiki:viewcomment', $PAGE->context)){
             unset($this->tabs['comments']);
@@ -162,6 +163,19 @@ abstract class page_wiki {
 
         if (!has_capability('mod/wiki:editpage', $PAGE->context)){
             unset($this->tabs['edit']);
+        }
+
+        if ($groupmode and $groupmode == VISIBLEGROUPS) {
+            $currentgroup = groups_get_activity_group($PAGE->cm);
+            $manage = has_capability('mod/wiki:managewiki', $PAGE->cm->context);
+            $edit = has_capability('mod/wiki:editpage', $PAGE->context);
+            if (!$manage and !($edit and groups_is_member($currentgroup))) {
+                unset($this->tabs['edit']);
+            }
+        } else {
+            if (!has_capability('mod/wiki:editpage', $PAGE->context)) {
+                unset($this->tabs['edit']);
+            }
         }
 
 
@@ -477,7 +491,7 @@ class page_wiki_edit extends page_wiki {
                 $params = 'pageid=' . $this->page->id;
 
                 if ($this->section) {
-                    $params .= '&section=' . $this->section;
+                    $params .= '&section=' . urlencode($this->section);
                 }
 
                 $form = '<form method="post" action="' . $CFG->wwwroot . '/mod/wiki/overridelocks.php?' . $params . '">';
@@ -523,7 +537,7 @@ class page_wiki_edit extends page_wiki {
 
         $url = $CFG->wwwroot . '/mod/wiki/edit.php?pageid=' . $this->page->id;
         if (!empty($this->section)) {
-            $url .= "&section=" . $this->section;
+            $url .= "&section=" . urlencode($this->section);
         }
 
         $params = array('attachmentoptions' => page_wiki_edit::$attachmentoptions, 'format' => $version->contentformat, 'version' => $versionnumber, 'pagetitle'=>$this->page->title);
@@ -990,7 +1004,7 @@ class page_wiki_preview extends page_wiki_edit {
 
         $url = $CFG->wwwroot . '/mod/wiki/edit.php?pageid=' . $this->page->id;
         if (!empty($this->section)) {
-            $url .= "&section=" . $this->section;
+            $url .= "&section=" . urlencode($this->section);
         }
         $params = array('attachmentoptions' => page_wiki_edit::$attachmentoptions, 'format' => $this->format, 'version' => $this->versionnumber);
 
@@ -1218,7 +1232,7 @@ class page_wiki_history extends page_wiki {
         $creator = wiki_get_user_info($version0page->userid);
         $a = new StdClass;
         $a->date = userdate($this->page->timecreated, get_string('strftimedaydatetime', 'langconfig'));
-        $a->username = $creator->username;
+        $a->username = fullname($creator);
         echo $OUTPUT->heading(get_string('createddate', 'wiki', $a), 4, 'wiki_headingtime');
         if ($vcount > 0) {
 
@@ -1246,20 +1260,13 @@ class page_wiki_history extends page_wiki {
             } else {
 
                 $checked = $vcount - $offset;
-                $lastdate = '';
                 $rowclass = array();
 
                 foreach ($versions as $version) {
                     $user = wiki_get_user_info($version->userid);
                     $picture = $OUTPUT->user_picture($user, array('popup' => true));
                     $date = userdate($version->timecreated, get_string('strftimedate'));
-                    if ($date == $lastdate) {
-                        $date = '';
-                        $rowclass[] = '';
-                    } else {
-                        $lastdate = $date;
-                        $rowclass[] = 'wiki_histnewdate';
-                    }
+                    $rowclass[] = 'wiki_histnewdate';
                     $time = userdate($version->timecreated, get_string('strftimetime', 'langconfig'));
                     $versionid = wiki_get_version($version->id);
                     if ($versionid) {
@@ -1980,7 +1987,7 @@ class page_wiki_save extends page_wiki_edit {
 
         $url = $CFG->wwwroot . '/mod/wiki/edit.php?pageid=' . $this->page->id;
         if (!empty($this->section)) {
-            $url .= "&section=" . $this->section;
+            $url .= "&section=" . urlencode($this->section);
         }
 
         $params = array('attachmentoptions' => page_wiki_edit::$attachmentoptions, 'format' => $this->format, 'version' => $this->versionnumber);
@@ -2305,7 +2312,7 @@ class page_wiki_overridelocks extends page_wiki_edit {
         $args = "pageid=" . $this->page->id;
 
         if (!empty($this->section)) {
-            $args .= "&section=" . $this->section;
+            $args .= "&section=" . urlencode($this->section);
         }
 
         redirect($CFG->wwwroot . '/mod/wiki/edit.php?' . $args, get_string('overridinglocks', 'wiki'), 2);
@@ -2334,7 +2341,7 @@ class page_wiki_overridelocks extends page_wiki_edit {
         $args = "pageid=" . $this->page->id;
 
         if (!empty($this->section)) {
-            $args .= "&section=" . $this->section;
+            $args .= "&section=" . urlencode($this->section);
         }
 
         redirect($CFG->wwwroot . '/mod/wiki/edit.php?' . $args, get_string('overridinglocks', 'wiki'), 2);
@@ -2545,7 +2552,7 @@ class page_wiki_admin extends page_wiki {
         $creator = wiki_get_user_info($version0page->userid);
         $a = new stdClass();
         $a->date = userdate($this->page->timecreated, get_string('strftimedaydatetime', 'langconfig'));
-        $a->username = $creator->username;
+        $a->username = fullname($creator);
         echo $OUTPUT->heading(get_string('createddate', 'wiki', $a), 4, 'wiki_headingtime');
         if ($versioncount > 0) {
             /// If there is only one version, we don't need radios nor forms

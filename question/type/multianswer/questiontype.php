@@ -36,9 +36,6 @@ require_once($CFG->dirroot . '/question/type/multichoice/question.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_multianswer extends question_type {
-    public function requires_qtypes() {
-        return array('shortanswer', 'numerical', 'multichoice');
-    }
 
     public function can_analyse_responses() {
         return false;
@@ -74,6 +71,9 @@ class qtype_multianswer extends question_type {
             $wrapped->maxmark = $wrapped->defaultmark;
             $question->options->questions[$sequence[$wrapped->id]] = $wrapped;
         }
+
+        $question->hints = $DB->get_records('question_hints',
+                array('questionid' => $question->id), 'id ASC');
 
         return true;
     }
@@ -164,6 +164,8 @@ class qtype_multianswer extends question_type {
                 $DB->insert_record('question_multianswer', $multianswer);
             }
         }
+
+        $this->save_hints($question);
     }
 
     public function save_question($authorizedquestion, $form) {
