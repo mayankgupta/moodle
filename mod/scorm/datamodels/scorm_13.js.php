@@ -90,9 +90,9 @@ function SCORMapi1_3() {
     var CMIInteger = '^\\d+$';
     var CMISInteger = '^-?([0-9]+)$';
     var CMIDecimal = '^-?([0-9]{1,5})(\\.[0-9]{1,18})?$';
-    var CMIIdentifier = '^\\S{0,250}[a-zA-Z0-9]$';
+    var CMIIdentifier = '^\\S{1,250}[a-zA-Z0-9]$';
     var CMIShortIdentifier = '^[\\w\.]{1,250}$';
-    var CMILongIdentifier = '^\\S{0,4000}$';
+    var CMILongIdentifier = '^\\S{1,4000}$';
     var CMIFeedback = '^.*$'; // This must be redefined
     var CMIIndex = '[._](\\d+).';
     var CMIIndexStore = '.N(\\d+).';
