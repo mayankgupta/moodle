@@ -209,7 +209,7 @@ function scorm_get_manifest($blocks, $scoes) {
                     $parent = array_pop($parents);
                     array_push($parents, $parent);
                     if (!isset($block['attrs']['MINPROGRESSMEASURE'])) {
-                        $block['attrs']['MINPROGRESSMEASURE'] = '';
+                        $block['attrs']['MINPROGRESSMEASURE'] = '1.0';
                     }
                     $scoes->elements[$manifest][$parent->organization][$parent->identifier]->threshold = $block['attrs']['MINPROGRESSMEASURE'];
                 break;
