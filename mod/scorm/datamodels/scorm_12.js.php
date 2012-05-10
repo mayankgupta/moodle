@@ -27,9 +27,8 @@ if (isset($userdata->status)) {
         }
     }
 }
-if (!isset($currentorg)) {
-    $currentorg = '';
-}
+$currentorg = $SESSION->scorm->currentorg;
+$mode = $SESSION->scorm->scormmode;
 ?>
 //
 // SCORM 1.2 API Implementation

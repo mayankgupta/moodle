@@ -133,7 +133,7 @@ if (($newattempt=='on') && (($attempt < $scorm->maxattempt) || ($scorm->maxattem
 }
 $attemptstr = '&amp;attempt=' . $attempt;
 
-$result = scorm_get_toc($USER, $scorm, $cm->id, TOCJSLINK, $currentorg, $scoid, $mode, $attempt, true, true);
+$result = scorm_get_toc_new($USER, $scorm, $cm->id, TOCJSLINK, $currentorg, $scoid, $mode, $attempt, true, true);
 $sco = $result->sco;
 
 if (($mode == 'browse') && ($scorm->hidebrowse == 1)) {
@@ -169,6 +169,7 @@ $SESSION->scorm->scoid = $sco->id;
 $SESSION->scorm->scormstatus = 'Not Initialized';
 $SESSION->scorm->scormmode = $mode;
 $SESSION->scorm->attempt = $attempt;
+$SESSION->scorm->currentorg = $currentorg;
 
 // Mark module viewed
 $completion = new completion_info($course);
