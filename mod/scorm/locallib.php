@@ -1698,3 +1698,46 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
 
     return $result;
 }
+
+function scorm_get_adlnav_json ($scoes, &$adlnav = array(), $parentscoid = null) {
+    if(is_object($scoes)) {
+        $sco = $scoes;
+        if(isset($sco->url)) {
+            $adlnav[$sco->id]['parent'] = $sco->parent;
+            $adlnav[$sco->id]['identifier'] = $sco->identifier;
+            $adlnav[$sco->id]['launch'] = $sco->launch;
+            $adlnav[$sco->id]['title'] = $sco->title;
+            $adlnav[$sco->id]['isvisible'] = $sco->isvisible;
+            $adlnav[$sco->id]['parameters'] = $sco->parameters;
+            if(isset($sco->hidecontinue)) {
+                $adlnav[$sco->id]['hidecontinue'] = $sco->hidecontinue;
+            }
+            if(isset($sco->hideprevious)) {
+                $adlnav[$sco->id]['hideprevious'] = $sco->hideprevious;
+            }
+            if(isset($sco->hidesuspendall)) {
+                $adlnav[$sco->id]['hidesuspendall'] = $sco->hidesuspendall;
+            }
+            $adlnav[$sco->id]['url'] = $sco->url;
+            if(!empty($parentscoid)) {
+                $adlnav[$sco->id]['parentscoid'] = $parentscoid;
+            }
+            if(isset($adlnav['prevscoid'])) {
+                $adlnav[$sco->id]['prevscoid'] = $adlnav['prevscoid'];
+                $adlnav[$adlnav['prevscoid']]['nextscoid'] = $sco->id;
+            }
+            $adlnav['prevscoid'] = $sco->id;
+        }
+        if(isset($sco->children)) {
+            foreach ($sco->children as $children) {
+                scorm_get_adlnav_json($children, $adlnav, $sco->id);
+            }
+        }
+    } else {
+        foreach ($scoes as $sco) {
+            scorm_get_adlnav_json ($sco, $adlnav);
+        }
+        unset($adlnav['prevscoid']);
+    }
+    return json_encode($adlnav);
+}
