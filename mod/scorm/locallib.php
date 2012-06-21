@@ -1384,7 +1384,13 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
 
     // Get the parent scoes!
     $result = scorm_get_toc_get_parent_child($result);
-    return array('scoes' => $result, 'usertracks' => $usertracks);
+
+    // Be safe, prevent warnings from showing up while returning array
+    if (!isset($scoid)) {
+        $scoid = '';
+    }
+
+    return array('scoes' => $result, 'usertracks' => $usertracks, 'scoid' => $scoid);
 }
 
 function scorm_get_toc_get_parent_child(&$result) {
@@ -1498,7 +1504,7 @@ function scorm_format_toc_for_treeview($user, $scorm, $scoes, $usertracks, $cmid
                     $viewscore = has_capability('mod/scorm:viewscores', get_context_instance(CONTEXT_MODULE, $cmid));
                     if (isset($usertracks[$sco->identifier]->score_raw) && $viewscore) {
                         if ($usertracks[$sco->identifier]->score_raw != '') {
-                            $score = '('.get_string('score','scorm').':&nbsp;'.$usertrack->score_raw.')';
+                            $score = '('.get_string('score','scorm').':&nbsp;'.$usertracks[$sco->identifier]->score_raw.')';
                         }
                     }
                 }
@@ -1657,6 +1663,10 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
         $result->toc .= $treeview->toc;
     } else {
         $result->toc = $treeview->toc;
+    }
+
+    if (!empty($scoes['scoid'])) {
+    	$scoid = $scoes['scoid'];
     }
 
     if (empty($scoid)) {
