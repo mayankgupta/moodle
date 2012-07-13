@@ -343,10 +343,10 @@ function SCORMapi1_3() {
                     if (adl.nav.request != '_none_') {
                         switch (adl.nav.request) {
                             case 'continue':
-                                setTimeout('scorm_get_next();',500);
+                                setTimeout('mod_scorm_launch_next_sco();',500);
                             break;
                             case 'previous':
-                                setTimeout('scorm_get_prev();',500);
+                                setTimeout('mod_scorm_launch_prev_sco();',500);
                             break;
                             case 'choice':
                             break;
@@ -361,7 +361,7 @@ function SCORMapi1_3() {
                         }
                     } else {
                         if (<?php echo $scorm->auto ?> == 1) {
-                            setTimeout('scorm_get_next();',500);
+                            setTimeout('mod_scorm_launch_next_sco();',500);
                         }
                     }
                     // trigger TOC update
@@ -552,6 +552,8 @@ function SCORMapi1_3() {
                                                         eval(parentelement+'._count++;');
                                                         eval(subelement+' = new Object();');
                                                         var subobject = eval(subelement);
+                                                        alert(subobject);
+                                                        alert('this is subele'+eval(subelement));
                                                         subobject.success_status = datamodel["cmi.objectives.n.success_status"].defaultvalue;
                                                         subobject.completion_status = datamodel["cmi.objectives.n.completion_status"].defaultvalue;
                                                         subobject.progress_measure = datamodel["cmi.objectives.n.progress_measure"].defaultvalue;

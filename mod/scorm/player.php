@@ -169,6 +169,7 @@ $SESSION->scorm->scoid = $sco->id;
 $SESSION->scorm->scormstatus = 'Not Initialized';
 $SESSION->scorm->scormmode = $mode;
 $SESSION->scorm->attempt = $attempt;
+$SESSION->scorm->currentorg = $currentorg;
 
 // Mark module viewed
 $completion = new completion_info($course);
@@ -265,12 +266,17 @@ if ($result->prerequisites) {
 ?>
     </div> <!-- SCORM page -->
 <?php
+$scoes = scorm_get_toc_object($USER, $scorm, "", $sco->id, $mode, $attempt);
+//echo "<pre>";
+//var_dump($scoes);
+$adlnav = scorm_get_adlnav_json($scoes['scoes']);
+//var_dump($adlnav);exit;
 // NEW IMS TOC
 if (empty($scorm->popup) || $displaymode == 'popup') {
     if (!isset($result->toctitle)) {
         $result->toctitle = get_string('toc', 'scorm');
     }
-    $PAGE->requires->js_init_call('M.mod_scorm.init', array($scorm->hidenav, $scorm->hidetoc, $result->toctitle, $name, $sco->id));
+    $PAGE->requires->js_init_call('M.mod_scorm.init', array($scorm->hidenav, $scorm->hidetoc, $result->toctitle, $name, $sco->id, $adlnav));
 }
 if (!empty($forcejs)) {
     echo $OUTPUT->box(get_string("forcejavascriptmessage", "scorm"), "generalbox boxaligncenter forcejavascriptmessage");

@@ -27,9 +27,8 @@ if (isset($userdata->status)) {
         }
     }
 }
-if (!isset($currentorg)) {
-    $currentorg = '';
-}
+$currentorg = $SESSION->scorm->currentorg;
+$mode = $SESSION->scorm->scormmode;
 ?>
 //
 // SCORM 1.2 API Implementation
@@ -211,13 +210,13 @@ function SCORMapi1_2() {
                 result = StoreData(cmi,true);
                 if (nav.event != '') {
                     if (nav.event == 'continue') {
-                        setTimeout('scorm_get_next();',500);
+                        setTimeout('mod_scorm_launch_next_sco();',500);
                     } else {
-                        setTimeout('scorm_get_prev();',500);
+                        setTimeout('mod_scorm_launch_prev_sco();',500);
                     }
                 } else {
                     if (<?php echo $scorm->auto ?> == 1) {
-                        setTimeout('scorm_get_next();',500);
+                        setTimeout('mod_scorm_launch_next_sco();',500);
                     }
                 }
                 <?php

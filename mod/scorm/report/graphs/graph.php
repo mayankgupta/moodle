@@ -66,6 +66,16 @@ $params = array();
 list($usql, $params) = $DB->get_in_or_equal($allowedlist);
 $params[] = $scoid;
 
+// Determine Sco keys to be used
+if (scorm_version_check($scorm->version, SCORM_13)) {
+    $maxkey = 'cmi.score.max';
+    $minkey = 'cmi.score.min';
+    $scorekey = 'cmi.score.raw';
+} else {
+    $maxkey = 'cmi.core.score.max';
+    $minkey = 'cmi.core.score.min';
+    $scorekey = 'cmi.core.score.raw';
+}
 $bands = 11;
 $bandwidth = 10;
 
@@ -89,16 +99,16 @@ if(!$nostudents) {
     foreach ($attempts as $attempt) {
         if ($trackdata = scorm_get_tracks($scoid, $attempt->userid, $attempt->attempt)) {
             if (isset($trackdata->$scorekey)) {
-                $score = $trackdata->score_raw;
-                if (empty($trackdata->score_min)) {
+                $score = $trackdata->$scorekey;
+                if (!isset($trackdata->$minkey) || empty($trackdata->$minkey)) {
                     $minmark = 0;
                 } else {
-                    $minmark = $trackdata->score_min;
+                    $minmark = $trackdata->$minkey;
                 }
-                if (empty($trackdata->score_max)) {
+                if (!isset($trackdata->$maxkey) || empty($trackdata->$maxkey)) {
                     $maxmark = 100;
                 } else {
-                    $maxmark = $trackdata->score_max;
+                    $maxmark = $trackdata->$maxkey;
                 }
                 $range = ($maxmark - $minmark);
                 if (empty($range)) {
