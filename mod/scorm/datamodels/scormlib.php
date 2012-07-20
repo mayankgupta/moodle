@@ -680,7 +680,7 @@ function scorm_optionals_data($item, $standarddata) {
 function scorm_is_leaf($sco) {
     global $DB;
 
-    if ($DB->get_record('scorm_scoes', array('scorm'=>$sco->scorm, 'parent'=>$sco->identifier))) {
+    if ($DB->get_records('scorm_scoes', array('scorm'=>$sco->scorm, 'parent'=>$sco->identifier))) {
         return false;
     }
     return true;
@@ -706,16 +706,17 @@ function scorm_get_children($sco) {
     return null;
 }
 
-function scorm_get_available_children($sco) {  // TODO: undefined vars!!!
+function scorm_get_available_children($sco) {
     global $DB;
 
-    $res = $DB->get_record('scorm_scoes_track', array('scoid'=>$scoid,
-                                                     'userid'=>$userid,
-                                                     'element'=>'availablechildren'));
+    $res = $DB->get_records('scorm_scoes', array('scorm'=>$sco->scorm, 'parent'=>$sco->identifier));
     if (!$res || $res == null) {
         return false;
     } else {
-        return unserialize($res->value);
+        foreach ($res as $sco) {
+            $result[] = $sco;
+        }
+        return $result;
     }
 }
 
