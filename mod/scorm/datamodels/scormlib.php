@@ -764,16 +764,17 @@ function scorm_get_ancestors($sco) {
     return $ancestors;
 }
 
-function scorm_get_preorder($preorder=array(), $sco) {
+function scorm_get_preorder(&$preorder = array(), $sco = null) {
     if ($sco != null) {
         array_push($preorder, $sco);
         $children = scorm_get_children($sco);
-        foreach ($children as $child) {
-            scorm_get_preorder($sco);
+        if ($children = scorm_get_children($sco)) {
+            foreach ($children as $child) {
+                scorm_get_preorder($sco);
+            }
         }
-    } else {
-        return $preorder;
     }
+    return $preorder;
 }
 
 function scorm_find_common_ancestor($ancestors, $sco) {
