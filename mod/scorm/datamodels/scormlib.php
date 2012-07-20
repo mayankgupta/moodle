@@ -275,6 +275,17 @@ function scorm_get_manifest($blocks, $scoes) {
                                     $scoes->elements[$manifest][$parent->organization][$parent->identifier]->usecurrentattemptprogressinfo = $sequencing['attrs']['USECURRENTATTEMPTPROGRESSINFO'] == 'true'?1:0;
                                 }
                             }
+                            if ($sequencing['name'] == 'IMSSS:DELIVERYCONTROLS') {
+                                if (isset($sequencing['attrs']['TRACKED'])) {
+                                    $scoes->elements[$manifest][$parent->organization][$parent->identifier]->tracked = $sequencing['attrs']['TRACKED'] == 'true'?1:0;
+                                }
+                                if (isset($sequencing['attrs']['COMPLETIONSETBYCONTENT'])) {
+                                    $scoes->elements[$manifest][$parent->organization][$parent->identifier]->completionsetbycontent = $sequencing['attrs']['COMPLETIONSETBYCONTENT'] == 'true'?1:0;
+                                }
+                                if (isset($sequencing['attrs']['OBJECTIVESETBYCONTENT'])) {
+                                    $scoes->elements[$manifest][$parent->organization][$parent->identifier]->objectivesetbycontent = $sequencing['attrs']['OBJECTIVESETBYCONTENT'] == 'true'?1:0;
+                                }
+                            }
                             if ($sequencing['name']=='ADLSEQ:CONSTRAINEDCHOICECONSIDERATIONS') {
                                 if (isset($sequencing['attrs']['CONSTRAINCHOICE'])) {
                                     $scoes->elements[$manifest][$parent->organization][$parent->identifier]->constrainChoice = $sequencing['attrs']['CONSTRAINCHOICE'] == 'true'?1:0;
