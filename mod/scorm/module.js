@@ -21,8 +21,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-mod_scorm_next = null;
-mod_scorm_prev = null;
+mod_scorm_launch_next_sco = null;
+mod_scorm_launch_prev_sco = null;
 mod_scorm_activate_item = null;
 
 M.mod_scorm = {};
@@ -258,6 +258,13 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             }
         };
 
+        // Handle AJAX Request
+        var scorm_ajax_request = function(url, datastring) {
+        	var myRequest = NewHttpReq();
+            var result = DoRequest(myRequest, url + datastring);
+            return result;
+        };
+
         var scorm_up = function(node, update_launch_sco) {
             var node = scorm_tree_node.getHighlightedNode();
             if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
@@ -350,8 +357,66 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             return null;
         };
 
-        mod_scorm_next = scorm_next;
-        mod_scorm_prev = scorm_prev;
+        // Launch prev sco        
+        var scorm_launch_prev_sco = function() {
+        	var result = null;
+        	if (scoes_nav[launch_sco].flow == 1) {
+            	var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=backward';
+            	if (mod_scorm_seq != null) {
+            		datastring = datastring + '&seq=' + mod_scorm_seq;
+            	}
+                result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
+                mod_scorm_seq = encodeURIComponent(result);
+                result = JSON.parse (result);
+                if (typeof result.nextactivity.id != undefined) {
+                	var node = scorm_prev(scorm_tree_node.getHighlightedNode())
+                	if (node == null) {
+                		// Avoid use of TreeView for Navigation
+                		node = scorm_tree_node.getHighlightedNode();
+                	}
+                	node.title = scoes_nav[result.nextactivity.id].url;
+                	launch_sco = result.nextactivity.id;
+                	scorm_activate_item(node);
+                	scorm_fixnav();
+                } else {
+                	scorm_activate_item(scorm_prev(scorm_tree_node.getHighlightedNode(), true));
+                }
+             } else {
+            	 scorm_activate_item(scorm_prev(scorm_tree_node.getHighlightedNode(), true));
+             }
+        };
+        
+        // Launch next sco
+        var scorm_launch_next_sco = function () {
+        	var result = null;
+        	if (scoes_nav[launch_sco].flow == 1) {
+            	var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=forward';
+            	if (mod_scorm_seq != null) {
+            		datastring = datastring + '&seq=' + mod_scorm_seq;
+            	}
+                result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
+                mod_scorm_seq = encodeURIComponent(result);
+                result = JSON.parse (result);
+                if (typeof result.nextactivity.id != undefined) {
+                	var node = scorm_next(scorm_tree_node.getHighlightedNode())
+                	if (node == null) {
+                		// Avoid use of TreeView for Navigation
+                		node = scorm_tree_node.getHighlightedNode();
+                	}
+                	node.title = scoes_nav[result.nextactivity.id].url;
+                	launch_sco = result.nextactivity.id;
+                	scorm_activate_item(node);
+                	scorm_fixnav();
+                } else {
+                	scorm_activate_item(scorm_next(scorm_tree_node.getHighlightedNode(), true));
+                }
+             } else {
+            	 scorm_activate_item(scorm_next(scorm_tree_node.getHighlightedNode(), true));
+             }
+        };
+        
+        mod_scorm_launch_prev_sco = scorm_launch_prev_sco;
+        mod_scorm_launch_next_sco = scorm_launch_next_sco;
 
         // layout
         YAHOO.widget.LayoutUnit.prototype.STR_COLLAPSE = M.str.moodle.hide;
@@ -452,13 +517,13 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 scorm_activate_item(scorm_skipprev(scorm_tree_node.getHighlightedNode(), true));
             });
             scorm_buttons[1].on('click', function(ev) {
-                scorm_activate_item(scorm_prev(scorm_tree_node.getHighlightedNode()));
+            	scorm_launch_prev_sco();
             });
             scorm_buttons[2].on('click', function(ev) {
                 scorm_activate_item(scorm_up(scorm_tree_node.getHighlightedNode(), true));
             });
             scorm_buttons[3].on('click', function(ev) {
-                scorm_activate_item(scorm_next(scorm_tree_node.getHighlightedNode()));
+                scorm_launch_next_sco();
             });
             scorm_buttons[4].on('click', function(ev) {
                 scorm_activate_item(scorm_skipnext(scorm_tree_node.getHighlightedNode(), true));
