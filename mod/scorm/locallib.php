@@ -1693,3 +1693,64 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
 
     return $result;
 }
+
+function scorm_get_adlnav_json ($scoes, &$adlnav = array(), $parentscoid = null) {
+    if (is_object($scoes)) {
+        $sco = $scoes;
+        if (isset($sco->url)) {
+            $adlnav[$sco->id]['identifier'] = $sco->identifier;
+            $adlnav[$sco->id]['launch'] = $sco->launch;
+            $adlnav[$sco->id]['title'] = $sco->title;
+            $adlnav[$sco->id]['url'] = $sco->url;
+            $adlnav[$sco->id]['parent'] = $sco->parent;
+            if (isset($sco->choice)) {
+                $adlnav[$sco->id]['choice'] = $sco->choice;
+            }
+            if (isset($sco->flow)) {
+                $adlnav[$sco->id]['flow'] = $sco->flow;
+            } else if (isset($parentscoid) && isset($adlnav[$parentscoid]['flow'])) {
+                $adlnav[$sco->id]['flow'] = $adlnav[$parentscoid]['flow'];
+            }
+            if (isset($sco->isvisible)) {
+                $adlnav[$sco->id]['isvisible'] = $sco->isvisible;
+            }
+            if (isset($sco->parameters)) {
+                $adlnav[$sco->id]['parameters'] = $sco->parameters;
+            }
+            if (isset($sco->hidecontinue)) {
+                $adlnav[$sco->id]['hidecontinue'] = $sco->hidecontinue;
+            }
+            if (isset($sco->hideprevious)) {
+                $adlnav[$sco->id]['hideprevious'] = $sco->hideprevious;
+            }
+            if (isset($sco->hidesuspendall)) {
+                $adlnav[$sco->id]['hidesuspendall'] = $sco->hidesuspendall;
+            }
+            if (!empty($parentscoid)) {
+                $adlnav[$sco->id]['parentscoid'] = $parentscoid;
+            }
+            if (isset($adlnav['prevscoid'])) {
+                $adlnav[$sco->id]['prevscoid'] = $adlnav['prevscoid'];
+                $adlnav[$adlnav['prevscoid']]['nextscoid'] = $sco->id;
+                if (isset($adlnav['prevparent']) && $adlnav['prevparent'] == $sco->parent) {
+                    $adlnav[$sco->id]['prevsibling'] = $adlnav['prevscoid'];
+                    $adlnav[$adlnav['prevscoid']]['nextsibling'] = $sco->id;
+                }
+            }
+            $adlnav['prevscoid'] = $sco->id;
+            $adlnav['prevparent'] = $sco->parent;
+        }
+        if (isset($sco->children)) {
+            foreach ($sco->children as $children) {
+                scorm_get_adlnav_json($children, $adlnav, $sco->id);
+            }
+        }
+    } else {
+        foreach ($scoes as $sco) {
+            scorm_get_adlnav_json ($sco, $adlnav);
+        }
+        unset($adlnav['prevscoid']);
+        unset($adlnav['prevparent']);
+    }
+    return json_encode($adlnav);
+}
