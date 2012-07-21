@@ -167,11 +167,15 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
          * @return void
          */
         var scorm_fixnav = function() {
-            scorm_buttons[0].set('disabled', (scorm_skipprev(scorm_current_node) == null || scorm_skipprev(scorm_current_node).title == null));
-            scorm_buttons[1].set('disabled', (scorm_prev(scorm_current_node) == null || scorm_prev(scorm_current_node).title == null));
+            scorm_buttons[0].set('disabled', (scorm_skipprev(scorm_current_node) == null || scorm_skipprev(scorm_current_node).title == null ||
+            		scoes_nav[launch_sco].hideprevious == 1));
+            scorm_buttons[1].set('disabled', (scorm_prev(scorm_current_node) == null || scorm_prev(scorm_current_node).title == null || 
+            		scoes_nav[launch_sco].hideprevious == 1));
             scorm_buttons[2].set('disabled', (scorm_up(scorm_current_node) == null) || scorm_up(scorm_current_node).title == null);
-            scorm_buttons[3].set('disabled', (scorm_next(scorm_current_node) == null) || scorm_next(scorm_current_node).title == null);
-            scorm_buttons[4].set('disabled', (scorm_skipnext(scorm_current_node) == null || scorm_skipnext(scorm_current_node).title == null));
+            scorm_buttons[3].set('disabled', (((scorm_next(scorm_current_node) == null || scorm_next(scorm_current_node).title == null) && 
+            		(scoes_nav[launch_sco].flow != 1)) || (scoes_nav[launch_sco].hidecontinue == 1)));
+            scorm_buttons[4].set('disabled', (scorm_skipnext(scorm_current_node) == null || scorm_skipnext(scorm_current_node).title == null ||
+            		scoes_nav[launch_sco].hidecontinue == 1));
         };
 
         var scorm_resize_parent = function() {
@@ -254,9 +258,14 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             }
         };
 
-        var scorm_up = function(node) {
+        var scorm_up = function(node, update_launch_sco) {
             var node = scorm_tree_node.getHighlightedNode();
-            if (node.depth > 0) {
+            if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+                var parentscoid = scoes_nav[launch_sco].parentscoid;
+                node.parent.title = scoes_nav[parentscoid].url;
+                if (update_launch_sco) {
+                	launch_sco = parentscoid;
+                }
                 return node.parent;
             }
             return null;
@@ -270,37 +279,73 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             }
         };
 
-        var scorm_prev = function(node) {
-            if (node.previousSibling && node.previousSibling.children.length) {
-                return scorm_lastchild(node.previousSibling);
+        var scorm_prev = function(node, update_launch_sco) {
+            if (node.previousSibling && node.previousSibling.children.length &&
+                    typeof scoes_nav[launch_sco].prevscoid != 'undefined') {
+                var node = scorm_lastchild(node.previousSibling);
+                if (node) {
+                	var prevscoid = scoes_nav[launch_sco].prevscoid;
+                    node.title = scoes_nav[prevscoid].url;
+                    if (update_launch_sco) {
+                    	launch_sco = prevscoid;
+                    }
+                    return node;
+                } else {
+                    return null;
+                }
             }
-            return scorm_skipprev(node);
+            return scorm_skipprev(node, update_launch_sco);
         };
 
-        var scorm_skipprev = function(node) {
-            if (node.previousSibling) {
+        var scorm_skipprev = function(node, update_launch_sco) {
+            if (node.previousSibling && typeof scoes_nav[launch_sco].prevsibling != 'undefined') {
+            	var prevsibling = scoes_nav[launch_sco].prevsibling;
+                node.previousSibling.title = scoes_nav[prevsibling].url;
+                if (update_launch_sco) {
+                	launch_sco = prevsibling;
+                }
                 return node.previousSibling;
-            } else if (node.depth > 0) {
+            } else if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            	var parentscoid = scoes_nav[launch_sco].parentscoid;
+                node.parent.title = scoes_nav[parentscoid].url;
+                if (update_launch_sco) {
+                	launch_sco = parentscoid;
+                }
                 return node.parent;
             }
             return null;
         };
 
-        var scorm_next = function(node) {
+        var scorm_next = function(node, update_launch_sco) {
             if (node === false) {
                 return scorm_tree_node.getRoot().children[0];
             }
-            if (node.children.length) {
-                return node.children[0];
+            if (node.children.length && typeof scoes_nav[launch_sco].nextscoid != 'undefined') {
+            	var node = node.children[0];
+                var nextscoid = scoes_nav[launch_sco].nextscoid;
+                node.title = scoes_nav[nextscoid].url;
+                if (update_launch_sco) {
+                	launch_sco = nextscoid;
+                }
+                return node;
             }
-            return scorm_skipnext(node);
+            return scorm_skipnext(node, update_launch_sco);
         };
 
-        var scorm_skipnext = function(node) {
-            if (node.nextSibling) {
+        var scorm_skipnext = function(node, update_launch_sco) {
+            if (node.nextSibling && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
+            	var nextsibling = scoes_nav[launch_sco].nextsibling;
+                node.nextSibling.title = scoes_nav[nextsibling].url;
+                if (update_launch_sco) {
+                	launch_sco = nextsibling;
+                }
                 return node.nextSibling;
-            } else if (node.depth > 0) {
-                return scorm_skipnext(node.parent);
+            } else if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            	var parentscoid = scoes_nav[launch_sco].parentscoid;
+            	if (update_launch_sco) {
+            		launch_sco = parentscoid;
+            	}
+                return scorm_skipnext(node.parent, update_launch_sco);
             }
             return null;
         };
@@ -404,19 +449,19 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             scorm_buttons[3] = new YAHOO.widget.Button('nav_next');
             scorm_buttons[4] = new YAHOO.widget.Button('nav_skipnext');
             scorm_buttons[0].on('click', function(ev) {
-                scorm_activate_item(scorm_skipprev(scorm_tree_node.getHighlightedNode()));
+                scorm_activate_item(scorm_skipprev(scorm_tree_node.getHighlightedNode(), true));
             });
             scorm_buttons[1].on('click', function(ev) {
                 scorm_activate_item(scorm_prev(scorm_tree_node.getHighlightedNode()));
             });
             scorm_buttons[2].on('click', function(ev) {
-                scorm_activate_item(scorm_up(scorm_tree_node.getHighlightedNode()));
+                scorm_activate_item(scorm_up(scorm_tree_node.getHighlightedNode(), true));
             });
             scorm_buttons[3].on('click', function(ev) {
                 scorm_activate_item(scorm_next(scorm_tree_node.getHighlightedNode()));
             });
             scorm_buttons[4].on('click', function(ev) {
-                scorm_activate_item(scorm_skipnext(scorm_tree_node.getHighlightedNode()));
+                scorm_activate_item(scorm_skipnext(scorm_tree_node.getHighlightedNode(), true));
             });
             scorm_nav_panel.render();
         }
