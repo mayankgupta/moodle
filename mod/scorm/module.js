@@ -467,18 +467,8 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         }
 
         // finally activate the chosen item
-        var scorm_first_url = tree.getRoot().children[0];
-        var nxt = false;
-        while (nxt = scorm_next(nxt)) {
-            if (nxt.title) {
-                expression = new RegExp('^.*?scoid=' + launch_sco + '.*?$');
-                matches = nxt.title.match(expression);
-                if (matches != null) {
-                    scorm_first_url = nxt;
-                    break;
-                }
-            }
-        }
+        var scorm_first_url = tree.getRoot().children[0];	
+        scorm_first_url.title = scoes_nav[launch_sco].url;
         scorm_activate_item(scorm_first_url);
 
         // resizing
