@@ -545,26 +545,3 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         };
     });
 };
-
-
-function scorm_get_prev() {
-	scorm_tree_node = YAHOO.widget.TreeView.getTree('scorm_tree');
-    if (scorm_tree_node) {
-        var hnode = scorm_tree_node.getHighlightedNode();
-        var prev = mod_scorm_prev(hnode);
-        if (prev) {
-            mod_scorm_activate_item(prev);
-        }
-    }
-}
-
-function scorm_get_next() {
-	scorm_tree_node = YAHOO.widget.TreeView.getTree('scorm_tree');
-    if (scorm_tree_node) {
-        var hnode = scorm_tree_node.getHighlightedNode();
-        var next = mod_scorm_next(hnode);
-        if (next) {
-            mod_scorm_activate_item(next);
-        }
-    }
-}
