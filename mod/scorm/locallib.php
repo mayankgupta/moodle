@@ -1298,10 +1298,7 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
                 }
             }
         }
-
         foreach ($scoes as $sco) {
-            $sco->title = $sco->title;
-
             if (!isset($sco->isvisible)) {
                 $sco->isvisible = true;
             }
@@ -1403,7 +1400,6 @@ function scorm_get_toc_get_parent_child(&$result) {
         if ($sco->parent == '/') {
             $final[$level][$sco->identifier] = $sco;
             $prevparent = $sco->identifier;
-            $level++;
             unset($result[$sco->id]);
         } else {
             if ($sco->parent == $prevparent) {
@@ -1422,6 +1418,7 @@ function scorm_get_toc_get_parent_child(&$result) {
                     if ($found) {
                         $final[$level][$sco->identifier] = $sco;
                         unset($result[$sco->id]);
+                        $found = false;
                     } else {
                         $level++;
                         $final[$level][$sco->identifier] = $sco;
@@ -1463,11 +1460,9 @@ function scorm_get_toc_get_parent_child(&$result) {
     $results = array();
     for ($i = 0; $i <= $level; $i++) {
         $keys = array_keys($final[$i]);
-        if ($final[$i][$keys[0]]->parent != '/') {
-            $results[] = $final[$i][$keys[0]];
-        }
+        $results[] = $final[$i][$keys[0]];
     }
-
+    
     return $results;
 }
 
@@ -1509,7 +1504,7 @@ function scorm_format_toc_for_treeview($user, $scorm, $scoes, $usertracks, $cmid
                     }
                 }
 
-                if ($sco->prereq) {
+                if (!empty($sco->prereq)) {
                     if ($sco->id == $scoid) {
                         $result->prerequisites = true;
                     }
@@ -1657,7 +1652,7 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
 
     $scoes = scorm_get_toc_object($user, $scorm, $currentorg, $scoid, $mode, $attempt, $play, $organizationsco);
 
-    $treeview = scorm_format_toc_for_treeview($user, $scorm, $scoes['scoes'], $scoes['usertracks'], $cmid, $toclink, $currentorg, $attempt, $play, $organizationsco, false);
+    $treeview = scorm_format_toc_for_treeview($user, $scorm, $scoes['scoes'][0]->children, $scoes['usertracks'], $cmid, $toclink, $currentorg, $attempt, $play, $organizationsco, false);
 
     if ($tocheader) {
         $result->toc .= $treeview->toc;
@@ -1670,13 +1665,13 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
     }
 
     if (empty($scoid)) {
-        $result->sco = $scoes['scoes'][0];
+        $result->sco = $scoes['scoes'][0]->children;
     } else {
         $result->sco = scorm_get_sco($scoid);
     }
 
     if ($scorm->hidetoc == SCORM_TOC_POPUP) {
-        $tocmenu = scorm_format_toc_for_droplist($scorm, $scoes['scoes'], $scoes['usertracks'], $currentorg, $organizationsco);
+        $tocmenu = scorm_format_toc_for_droplist($scorm, $scoes['scoes'][0]->children, $scoes['usertracks'], $currentorg, $organizationsco);
 
         $modestr = '';
         if ($mode == 'browse') {
