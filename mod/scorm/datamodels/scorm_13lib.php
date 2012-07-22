@@ -352,7 +352,7 @@ function scorm_seq_end_attempt($sco, $userid, $seq) {
             scorm_seq_set('suspended',$sco,$userid, $seq->attempt, false);
         }
     }
-    scorm_seq_set('active', $sco->id, $userid, 0, false);
+    scorm_seq_set('active', $sco->id, $userid, $seq->attempt, false);
     scorm_seq_overall_rollup($sco, $userid, $seq);
 }
 
@@ -376,7 +376,7 @@ function scorm_seq_set($what, $scoid, $userid, $attempt=0, $value='true') {
     if ($value == false) {
         $DB->delete_records('scorm_scoes_track', array('scoid'=>$scoid,'userid'=>$userid,'attempt'=>$attempt,'element'=>$what));
     } else {
-        scorm_insert_track($userid, $sco->scorm, $sco->id, 0, $what, $value);
+        scorm_insert_track($userid, $sco->scorm, $sco->id, $attempt, $what, $value);
     }
 
     // update grades in gradebook
@@ -710,14 +710,14 @@ function scorm_seq_measure_rollup($sco, $userid, $attempt = 0) {
         }
 
         if (!$valid) {
-            scorm_seq_set('objectivemeasurestatus', $sco->id, $userid,false);
+            scorm_seq_set('objectivemeasurestatus', $sco->id, $userid, $attempt, false);
         } else {
             if ($countedmeasures > 0) {
-                scorm_seq_set('objectivemeasurestatus', $sco->id, $userid);
+                scorm_seq_set('objectivemeasurestatus', $sco->id, $userid, $attempt);
                 $val = $totalmeasure/$countedmeasures;
-                scorm_seq_set('objectivenormalizedmeasure',$sco->id, $userid, $val);
+                scorm_seq_set('objectivenormalizedmeasure',$sco->id, $userid, $attempt, $val);
             } else {
-                scorm_seq_set('objectivemeasurestatus', $sco->id, $userid, false);
+                scorm_seq_set('objectivemeasurestatus', $sco->id, $userid, $attempt, false);
             }
         }
     }
@@ -788,12 +788,13 @@ function scorm_seq_objective_rollup_measure($sco, $userid, $attempt = 0) {
                 $sco = scorm_get_sco ($sco->id);
 
                 if (!$isactive || ($isactive && (!isset($sco->measuresatisfactionifactive) || $sco->measuresatisfactionifactive == true))){
-                    if ($normalizedmeasure->value >= $targetobjective->minnormalizedmeasure) {
+                    if (isset($normalizedmeasure->value) && ($normalizedmeasure->value >= $targetobjective->minnormalizedmeasure)) {
                         scorm_seq_set('objectiveprogressstatus', $sco->id, $userid, $attempt);
                         scorm_seq_set('objectivesatisfiedstatus', $sco->id, $userid, $attempt);
                     } else {
-                        scorm_seq_set('objectiveprogressstatus', $sco->id, $userid, $attempt);
-                        scorm_seq_set('objectivesatisfiedstatus', $sco->id, $userid, $attempt, false);
+                        // TODO: handle the case where cmi.success_status is passed and objectivenormalizedmeasure undefined
+                        scorm_seq_set('objectiveprogressstatus', $sco->id, $userid, $attempt);              
+                        // scorm_seq_set('objectivesatisfiedstatus', $sco->id, $userid, $attempt, false);
                     }
                 } else {
                     scorm_seq_set('objectiveprogressstatus', $sco->id, $userid, $attempt, false);
@@ -803,7 +804,7 @@ function scorm_seq_objective_rollup_measure($sco, $userid, $attempt = 0) {
     }
 }
 
-function scorm_seq_objective_rollup_default($sco, $userid) {
+function scorm_seq_objective_rollup_default($sco, $userid, $attempt = 0) {
     global $DB;
 
     if (!(scorm_seq_rollup_rule_check($sco,$userid,'incomplete')) && !(scorm_seq_rollup_rule_check($sco,$userid,'completed'))){
@@ -812,7 +813,7 @@ function scorm_seq_objective_rollup_default($sco, $userid) {
                 $rollupruleconds = $DB->get_records('scorm_seq_rolluprulecond', array('rollupruleid'=>$rolluprule->id));
                 foreach($rollupruleconds as $rolluprulecond){
                     if ($rolluprulecond->cond!='satisfied' && $rolluprulecond->cond!='completed' && $rolluprulecond->cond!='attempted'){
-                        scorm_seq_set('objectivesatisfiedstatus',$sco->id,$userid, false);
+                        scorm_seq_set('objectivesatisfiedstatus',$sco->id,$userid, $attempt, false);
                         break;
                     }
                 }
@@ -822,7 +823,7 @@ function scorm_seq_objective_rollup_default($sco, $userid) {
 }
 
 
-function scorm_seq_objective_rollup_rules($sco,$userid){
+function scorm_seq_objective_rollup_rules($sco,$userid, $attempt = 0){
     global $DB;
 
     $targetobjective = null;
@@ -835,13 +836,14 @@ function scorm_seq_objective_rollup_rules($sco,$userid){
         }
     }
     if ($targetobjective != null){
+
         if(scorm_seq_rollup_rule_check($sco,$userid,'notsatisfied')){//with not satisfied rollup for the activity
-            scorm_seq_set('objectiveprogressstatus',$sco->id,$userid);
-            scorm_seq_set('objectivesatisfiedstatus',$sco->id,$userid,false);
+            scorm_seq_set('objectiveprogressstatus', $sco->id, $userid, $attempt);            
+            scorm_seq_set('objectivesatisfiedstatus', $sco->id, $userid, $attempt, false);
         }
-        if(scorm_seq_rollup_rule_check($sco,$userid,'satisfied')){//with satisfied rollup for the activity
-            scorm_seq_set('objectiveprogressstatus',$sco->id,$userid);
-            scorm_seq_set('objectivesatisfiedstatus',$sco->id,$userid);
+        if(scorm_seq_rollup_rule_check($sco, $userid, 'satisfied')){//with satisfied rollup for the activity
+            scorm_seq_set('objectiveprogressstatus', $sco->id, $userid, $attempt);
+            scorm_seq_set('objectivesatisfiedstatus', $sco->id, $userid, $attempt);
         }
 
     }
@@ -852,14 +854,14 @@ function scorm_seq_activity_progress_rollup ($sco, $userid, $seq){
 
     if(scorm_seq_rollup_rule_check($sco,$userid,'incomplete')){
         //incomplete rollup action
-        scorm_seq_set('attemptcompletionstatus',$sco->id,$userid,false,$seq->attempt);
-        scorm_seq_set('attemptprogressstatus',$sco->id,$userid,true,$seq->attempt);
+        scorm_seq_set('attemptcompletionstatus', $sco->id,$userid, $seq->attempt, false);
+        scorm_seq_set('attemptprogressstatus', $sco->id,$userid, $seq->attempt, true);
 
     }
     if(scorm_seq_rollup_rule_check($sco,$userid,'completed')){
         //incomplete rollup action
-        scorm_seq_set('attemptcompletionstatus',$sco->id,true,$userid);
-        scorm_seq_set('attemptprogressstatus',$sco->id,true,$userid);
+        scorm_seq_set('attemptcompletionstatus',$sco->id,$userid, $seq->attempt, true);
+        scorm_seq_set('attemptprogressstatus',$sco->id,$userid, $seq->attempt, true);
     }
 
 }
@@ -988,7 +990,7 @@ function scorm_seq_flow_tree_traversal ($activity, $direction, $childrenflag, $p
         if (scorm_is_leaf ($activity) || !$childrenflag){
             if ($children[$childrensize-1]->id == $activity->id){
 
-                $seq = scorm_seq_flow_tree_traversal ($parent, $direction, false, null, $seq,$userid);
+                $seq = scorm_seq_flow_tree_traversal ($parent, $direction, false, null, $seq, $userid);
                 // I think it's not necessary to do a return in here
             }
             else {
