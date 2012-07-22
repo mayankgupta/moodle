@@ -400,6 +400,58 @@ function scorm_insert_track($userid, $scormid, $scoid, $attempt, $element, $valu
                 }
             }
         }
+        if (($element == 'cmi.success_status') && ($value == 'passed' || $value == 'failed')) {
+            if ($DB->get_record('scorm_scoes_data', array('scoid'=>$scoid, 'name'=>'objectivesetbycontent'))) {
+        	    $objectiveprogressstatus = true;
+        	    $objectivesatisfiedstatus = false;
+        	    if ($value == 'passed') {
+        		    $objectivesatisfiedstatus = true;
+                }
+
+        		if ($track = $DB->get_record('scorm_scoes_track', array('userid'=>$userid, 'scormid'=>$scormid, 'scoid'=>$scoid, 'attempt'=>$attempt, 'element'=>'objectiveprogressstatus'))) {
+                    $track->value = $objectiveprogressstatus;
+                    $track->timemodified = time();
+                    $DB->update_record('scorm_scoes_track', $track);
+                    $id = $track->id;
+        		} else {
+        		    $track = new stdClass();
+                    $track->userid = $userid;
+                    $track->scormid = $scormid;
+                    $track->scoid = $scoid;
+                    $track->attempt = $attempt;
+                    $track->element = 'objectiveprogressstatus';
+                    $track->value = $objectiveprogressstatus;
+                    $track->timemodified = time();
+                    $id = $DB->insert_record('scorm_scoes_track', $track);
+        		}
+        		if ($objectivesatisfiedstatus) {
+                    if ($track = $DB->get_record('scorm_scoes_track', array('userid'=>$userid, 'scormid'=>$scormid, 'scoid'=>$scoid, 'attempt'=>$attempt, 'element'=>'objectivesatisfiedstatus'))) {
+                        $track->value = $objectivesatisfiedstatus;
+                        $track->timemodified = time();
+                        $DB->update_record('scorm_scoes_track', $track);
+                        $id = $track->id;
+                    } else {
+                        $track = new stdClass();
+                        $track->userid = $userid;
+                        $track->scormid = $scormid;
+                        $track->scoid = $scoid;
+                        $track->attempt = $attempt;
+                        $track->element = 'objectivesatisfiedstatus';
+                        $track->value = $objectivesatisfiedstatus;
+                        $track->timemodified = time();
+                        $id = $DB->insert_record('scorm_scoes_track', $track);
+                        ob_start();
+                $filepath = $CFG->dataroot."\\temp\\tempfile.txt";
+                $fh = fopen($filepath, "a+");
+                var_dump($track);
+                $string = ob_get_clean();
+                fwrite($fh, $string);
+                fclose($fh);
+                    }
+                }
+            }
+        }
+
     }
 
     if ($track = $DB->get_record('scorm_scoes_track', array('userid'=>$userid, 'scormid'=>$scormid, 'scoid'=>$scoid, 'attempt'=>$attempt, 'element'=>$element))) {
