@@ -362,9 +362,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         	var result = null;
         	if (scoes_nav[launch_sco].flow == 1) {
             	var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=backward';
-            	if (mod_scorm_seq != null) {
-            		datastring = datastring + '&seq=' + mod_scorm_seq;
-            	}
                 result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
                 mod_scorm_seq = encodeURIComponent(result);
                 result = JSON.parse (result);
@@ -391,9 +388,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         	var result = null;
         	if (scoes_nav[launch_sco].flow == 1) {
             	var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=forward';
-            	if (mod_scorm_seq != null) {
-            		datastring = datastring + '&seq=' + mod_scorm_seq;
-            	}
                 result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
                 mod_scorm_seq = encodeURIComponent(result);
                 result = JSON.parse (result);
