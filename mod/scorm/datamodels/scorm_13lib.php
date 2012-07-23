@@ -989,9 +989,8 @@ function scorm_seq_flow_tree_traversal ($activity, $direction, $childrenflag, $p
         }
         if (scorm_is_leaf ($activity) || !$childrenflag){
             if ($children[$childrensize-1]->id == $activity->id){
-
                 $seq = scorm_seq_flow_tree_traversal ($parent, $direction, false, null, $seq, $userid);
-                // I think it's not necessary to do a return in here
+                return $seq;
             }
             else {
                 $parent = scorm_get_parent($activity);
@@ -1002,7 +1001,8 @@ function scorm_seq_flow_tree_traversal ($activity, $direction, $childrenflag, $p
                     $seq->nextactivity = $siblings[$activity->id + 1];
                     return $seq;
                 } else {
-                    $ch = scorm_get_children($siblings[0]);
+                    $siblings = array_values($siblings);
+                    $ch = array_values(scorm_get_children($siblings[0]));
                     $seq->nextactivity = $ch[0];
                     return $seq;
                 }
