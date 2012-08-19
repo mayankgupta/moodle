@@ -767,10 +767,9 @@ function scorm_get_ancestors($sco) {
 function scorm_get_preorder(&$preorder = array(), $sco = null) {
     if ($sco != null) {
         array_push($preorder, $sco);
-        $children = scorm_get_children($sco);
         if ($children = scorm_get_children($sco)) {
             foreach ($children as $child) {
-                scorm_get_preorder($sco);
+                scorm_get_preorder($preorder, $child);
             }
         }
     }
