@@ -575,6 +575,7 @@ function scorm_parse_scorm($scorm, $manifest) {
                                     $rulecond->ruleconditionsid = $ruleid;
                                     $rulecond->referencedobjective = $rulecondition->referencedobjective;
                                     $rulecond->measurethreshold = $rulecondition->measurethreshold;
+                                    $rulecond->operator = $rulecondition->operator;
                                     $rulecond->cond = $rulecondition->cond;
                                     $rulecondid = $DB->insert_record('scorm_seq_rulecond', $rulecond);
                                 }
