@@ -62,15 +62,12 @@ if (!empty($scoid) && !empty($function)) {
 				if ($request == 'forward' || $request == 'backward') {
 					$seq = scorm_seq_navigation ($scoid, $USER->id, $request.'_', $attempt);
 					$sco = scorm_get_sco($scoid);
-					$result = scorm_seq_flow($sco, $request, $seq, true, $USER->id);
-				    
-					if (!empty($seq->nextactivity) && !empty($seq->identifiedactivity) && 
-	                        ($seq->nextactivity->id !=  $seq->identifiedactivity->id)) {
-	
-	                    scorm_seq_end_attempt($sco, $USER->id, $seq);               	
+					$seq = scorm_seq_flow($sco, $request, $seq, true, $USER->id);
+					if (!empty($seq->nextactivity)) {
+	                    scorm_seq_end_attempt($sco, $USER->id, $seq);        	
 	                }
 				}
-				echo json_encode($result);
+				echo json_encode($seq);
 				break;
 		}
 	}
