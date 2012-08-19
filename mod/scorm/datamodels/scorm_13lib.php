@@ -318,9 +318,11 @@ function scorm_seq_end_attempt($sco, $userid, $seq) {
             if (!scorm_seq_is('suspended',$sco->id,$userid)) {
                 if (!isset($sco->completionsetbycontent) || ($sco->completionsetbycontent == 0)) {
                     if (!scorm_seq_is('attemptprogressstatus',$sco->id, $userid, $seq->attempt)) {
-                  // if (!scorm_seq_is('attemptprogressstatus',$sco->id,$userid)) {
-                        scorm_seq_set('attemptprogressstatus',$sco->id,$userid, $seq->attempt);
-                        scorm_seq_set('attemptcompletionstatus',$sco->id,$userid, $seq->attempt);
+                        $incomplete = $DB->get_field('scorm_scoes_track', 'value', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'cmi.completion_status'));
+                        if ($incomplete != 'incomplete') {
+                            scorm_seq_set('attemptprogressstatus',$sco->id,$userid, $seq->attempt);  
+                            scorm_seq_set('attemptcompletionstatus',$sco->id,$userid, $seq->attempt);
+                        }
                     }
                 }
                 if (!isset($sco->objectivesetbycontent) || ($sco->objectivesetbycontent == 0)) {
@@ -398,7 +400,7 @@ function scorm_evaluate_condition ($rollupruleconds, $sco, $userid) {
     }
     foreach($rollupruleconds as $rolluprulecond) {
         $notflag = false;
-        if (strpos($rolluprulecond, 'not')) {
+        if (strpos($rolluprulecond, 'not') !== false) {
             $rolluprulecond = str_replace('not', '', $rolluprulecond);
             $notflag = true;
         }
@@ -408,92 +410,79 @@ function scorm_evaluate_condition ($rollupruleconds, $sco, $userid) {
     }
     foreach ($conditions as $condition) {
         $checknot = true;
+        $res = false;
         if ($condition['notflag']) {
             $checknot = false;
         }
         switch ($condition['condition']) {
             case 'satisfied':
-                if($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectivesatisfiedstatus'))) {
-                    if($r->value == $checknot) {
-                        if ($r=$DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectiveprogressstatus'))) {
-                            if($r->value == $checknot) {
-                                $res = true;
-                            }
-                        }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectivesatisfiedstatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectiveprogressstatus'));
+                    if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                        $res = true;
                     }
                 }
                 break;
 
             case 'objectiveStatusKnown':
-                if ($r=$DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectiveprogressstatus'))) {
-                    if($r->value == $checknot) {
-                        $res = true;
-                    }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectiveprogressstatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $res = true;
                 }
                 break;
                 
             case 'notobjectiveStatusKnown':
-                if ($r=$DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectiveprogressstatus'))) {
-                    if($r->value == $checknot) {
-                        $res = true;
-                    }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectiveprogressstatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $res = true;
                 }
                 break;
 
             case 'objectiveMeasureKnown':
-                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectivemeasurestatus'))) {
-                    if($r->value == $checknot) {
-                        $res = true;
-                    }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectivemeasurestatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $res = true;
                  }
                  break;
 
             case 'notobjectiveMeasureKnown':
-                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectivemeasurestatus'))) {
-                    if($r->value == $checknot) {
-                        $res = true;
-                    }
-                 }
-                 break;
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'objectivemeasurestatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $res = true;
+                }
+                break;
 
             case 'completed':
-                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'attemptcompletionstatus'))) {
-                    if($r->value == $checknot) {
-                        if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'attemptprogressstatus'))) {
-                            if($r->value == $checknot) {
-                                $res = true;
-                            }
-                        }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'attemptcompletionstatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'attemptprogressstatus'));
+                    if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                        $res = true;
                     }
                 }
                 break;
     
             case 'attempted':
-                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityprogressstatus'))) {
-                    if($r->value == $checknot) {
-                        if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityattemptcount'))) {
-                            if($checknot && $r->value > 0) {
-                                $res = true;
-                            } else if(!$checknot && $r->value <= 0) {
-                                $res = true;
-                            }
-                        }
-                    }
+                $attempt = $DB->get_field('scorm_scoes_track', 'attempt', array('scoid'=>$sco->id, 'userid'=>$userid, 'element'=>'x.start.time'));
+                if ($checknot && $attempt > 0) {
+                    $res = true;
+                } else if (!$checknot && $attempt <= 0) {
+                    $res = true;
                 }
                 break;
     
             case 'attemptLimitExceeded':
-                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityprogressstatus'))) {
-                    if($r->value == $checknot){
-                        if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'limitconditionattemptlimitcontrol'))) {
-                            if($r->value == $checknot){
-                                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityattemptcount')) && $r2 = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'limitconditionattemptlimit')) ){
-                                    if($checknot && ($r->value >= $r2->value)) {
-                                        $res = true;
-                                    } else if(!$checknot && ($r->value < $r2->value)) {
-                                        $res = true;
-                                    } 
-                                }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityprogressstatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'limitconditionattemptlimitcontrol'));
+                    if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                        if ($r = $DB->get_field('scorm_scoes_track', 'attempt', array('scoid'=>$sco->id,'userid'=>$userid)) &&
+                            $r2 = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'limitconditionattemptlimit')) ){
+                            if ($checknot && ($r->value >= $r2->value)) {
+                                $res = true;
+                            } else if (!$checknot && ($r->value < $r2->value)) {
+                                $res = true;
                             }
                         }
                     }
@@ -501,13 +490,11 @@ function scorm_evaluate_condition ($rollupruleconds, $sco, $userid) {
                 break;
     
             case 'activityProgressKnown':
-                if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityprogressstatus'))) {
-                    if($r->value == $checknot){
-                        if ($r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'attemptprogressstatus'))) {
-                            if($r->value == $checknot){
-                                $res = true;
-                            }
-                        }
+                $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'activityprogressstatus'));
+                if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                    $r = $DB->get_record('scorm_scoes_track', array('scoid'=>$sco->id,'userid'=>$userid,'element'=>'attemptprogressstatus'));
+                    if ((!isset($r->value) && !$checknot) || (isset($r->value) && ($r->value == $checknot))) {
+                        $res = true;
                     }
                 }
                 break;
@@ -631,7 +618,7 @@ function scorm_seq_rule_check ($sco, $rule){
                 $rulecond->cond = 'not'.$rulecond->cond;
              }
          }
-         $bag [$rule->id] = $rulecond->cond;
+         $bag[] = $rulecond->cond;
     }
     if (empty($bag)){
         $cond = 'unknown';
