@@ -50,6 +50,14 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
     Y.use('yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
+        Y.TreeView.prototype.openAll = function () {
+            var tree = this;
+            Y.all('.yui3-treeview-can-have-children').each(function() {
+                var node = tree.getNodeById(this.get('id'));
+                node.open();
+            });
+        }
+
         var scorm_parse_toc_tree = function(srcNode) {
             var sourceNode = Y.one(srcNode);
             var sourceSelectors = {
@@ -531,8 +539,8 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 }
             });
         }
-        tree.expandAll();
         tree.render();
+        tree.openAll();
 
         // On getting the window, always set the focus on the current item
         Y.YUI2.util.Event.on(window, 'focus', function (e) {
