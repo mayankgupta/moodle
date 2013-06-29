@@ -600,20 +600,16 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 M.mod_scorm.connectPrereqCallback = {
 
     success: function(o) {
-        YUI().use('yui2-layout', function(Y) {
+        Y.use('yui2-layout', function(Y) {
             if (o.responseText !== undefined) {
-                var tree = new Y.YUI2.widget.TreeView('scorm_tree');
                 if (scorm_tree_node && o.responseText) {
-                    var hnode = scorm_tree_node.getHighlightedNode();
-                    var hidx = null;
-                    if (hnode) {
-                        hidx = hnode.index + scorm_tree_node.getNodeCount();
+                    var snode = scorm_tree_node.getSelectedNodes()[0];
+                    var stitle = null;
+                    if (snode) {
+                        stitle = snode.title;
                     }
-                    // all gone
-                    var root_node = scorm_tree_node.getRoot();
-                    while (root_node.children.length > 0) {
-                        scorm_tree_node.removeNode(root_node.children[0]);
-                    }
+                    // all gone with clear, add new root node
+                    scorm_tree_node.clear(scorm_tree_node.createNode());
                 }
                 // make sure the temporary tree element is not there
                 var el_old_tree = document.getElementById('scormtree123');
@@ -634,18 +630,24 @@ M.mod_scorm.connectPrereqCallback = {
                     startNode = el_new_tree;
                 }
                 //var sXML = new XMLSerializer().serializeToString(startNode);
-                scorm_tree_node.buildTreeFromMarkup('scormtree123');
+                var toc = mod_scorm_parse_toc_tree('#scormtree123 > ul');
+                scorm_tree_node.appendNode(scorm_tree_node.rootNode, toc);
                 var el = document.getElementById('scormtree123');
                 el.parentNode.removeChild(el);
-                scorm_tree_node.expandAll();
                 scorm_tree_node.render();
-                if (hidx != null) {
-                    hnode = scorm_tree_node.getNodeByIndex(hidx);
-                    if (hnode) {
-                        hnode.highlight();
+                scorm_tree_node.openAll();
+                if (stitle != null) {
+                    var node = Y.one('a[title="' + stitle + '"]');
+                    if (node !== null) {
+                        snode = scorm_tree_node.getNodeById(node.ancestor('li').get('id'));
+                    }
+                    if (snode) {
+                        snode.select();
                         var left = scorm_layout_widget.getUnitByPosition('left');
                         if (left.expand) {
-                            hnode.focus();
+                            if (!snode.state.selected) {
+                                snode.select();
+                            }
                         }
                     }
                 }
