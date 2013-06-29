@@ -49,6 +49,53 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
     Y.use('yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
+        var scorm_parse_toc_tree = function(srcNode) {
+            var sourceNode = Y.one(srcNode);
+            var sourceSelectors = {
+                    child: '> li',
+                    label: '> li, > a',
+                    subtree: '> ul, > li'
+                },
+                children = [],
+                sel = sourceSelectors;
+
+            sourceNode.all(sel.child).each(function(childNode) {
+                var child = {},
+                    itemEl = childNode._node,
+                    labelNode = childNode.one(sel.label),
+                    subTreeNode = childNode.one(sel.subtree);
+
+                if (labelNode) {
+                    var title = labelNode.getAttribute('title');
+                    child.label = labelNode.get('outerHTML');
+                    // Will be good to change to url instead of title
+                    if (title && title !== '#') {
+                        child.title = title;
+                    }
+                } else {
+                    // The selector didn not find a label node, so look for the first
+                    // text child of the item element.
+                    var childEl;
+                    for (var i = 0, length = itemEl.childNodes.length; i < length; i++) {
+                        childEl = itemEl.childNodes[i];
+
+                        if (childEl.nodeType === doc.TEXT_NODE) {
+                            item.label = Y.Escape.html(childEl.nodeValue);
+                            break;
+                        }
+                    }
+                }
+
+                if (subTreeNode) {
+                    child.children = scorm_parse_toc_tree(subTreeNode);
+                }
+
+                children.push(child);
+            });
+
+            return children;
+        };
+
         var scorm_activate_item = function(node) {
             if (!node) {
                 return;
