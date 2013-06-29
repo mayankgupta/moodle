@@ -24,6 +24,7 @@
 mod_scorm_launch_next_sco = null;
 mod_scorm_launch_prev_sco = null;
 mod_scorm_activate_item = null;
+mod_scorm_parse_toc_tree = null;
 scorm_layout_widget = null;
 
 M.mod_scorm = {};
@@ -95,6 +96,8 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
             return children;
         };
+
+        mod_scorm_parse_toc_tree = scorm_parse_toc_tree;
 
         var scorm_activate_item = function(node) {
             if (!node) {
