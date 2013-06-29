@@ -49,24 +49,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
     Y.use('yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
-        Y.YUI2.widget.TextNode.prototype.getContentHtml = function() {
-            var sb = [];
-            sb[sb.length] = this.href ? '<a' : '<span';
-            sb[sb.length] = ' id="' + Y.YUI2.lang.escapeHTML(this.labelElId) + '"';
-            sb[sb.length] = ' class="' + Y.YUI2.lang.escapeHTML(this.labelStyle) + '"';
-            if (this.href) {
-                sb[sb.length] = ' href="' + Y.YUI2.lang.escapeHTML(this.href) + '"';
-                sb[sb.length] = ' target="' + Y.YUI2.lang.escapeHTML(this.target) + '"';
-            }
-            if (this.title) {
-                sb[sb.length] = ' title="' + Y.YUI2.lang.escapeHTML(this.title) + '"';
-            }
-            sb[sb.length] = ' >';
-            sb[sb.length] = this.label;
-            sb[sb.length] = this.href?'</a>':'</span>';
-            return sb.join("");
-        };
-
         var scorm_activate_item = function(node) {
             if (!node) {
                 return;
@@ -538,25 +520,6 @@ M.mod_scorm.connectPrereqCallback = {
 
     success: function(o) {
         YUI().use('yui2-layout', function(Y) {
-            // MDL-29159 The core version of getContentHtml doesn't escape text properly.
-            Y.YUI2.widget.TextNode.prototype.getContentHtml = function() {
-                var sb = [];
-                sb[sb.length] = this.href ? '<a' : '<span';
-                sb[sb.length] = ' id="' + Y.YUI2.lang.escapeHTML(this.labelElId) + '"';
-                sb[sb.length] = ' class="' + Y.YUI2.lang.escapeHTML(this.labelStyle) + '"';
-                if (this.href) {
-                    sb[sb.length] = ' href="' + Y.YUI2.lang.escapeHTML(this.href) + '"';
-                    sb[sb.length] = ' target="' + Y.YUI2.lang.escapeHTML(this.target) + '"';
-                }
-                if (this.title) {
-                    sb[sb.length] = ' title="' + Y.YUI2.lang.escapeHTML(this.title) + '"';
-                }
-                sb[sb.length] = ' >';
-                sb[sb.length] = this.label;
-                sb[sb.length] = this.href?'</a>':'</span>';
-                return sb.join("");
-            };
-
             if (o.responseText !== undefined) {
                 var tree = new Y.YUI2.widget.TreeView('scorm_tree');
                 if (scorm_tree_node && o.responseText) {
