@@ -47,7 +47,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
     var scorm_bloody_labelclick = false;
     var scorm_nav_panel;
 
-    Y.use('yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'yui2-treeview', 'yui2-json', 'yui2-event', function(Y) {
+    Y.use('yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
         Y.YUI2.widget.TextNode.prototype.getContentHtml = function() {
             var sb = [];
@@ -558,7 +558,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 M.mod_scorm.connectPrereqCallback = {
 
     success: function(o) {
-        YUI().use('yui2-treeview', 'yui2-layout', function(Y) {
+        YUI().use('yui2-layout', function(Y) {
             // MDL-29159 The core version of getContentHtml doesn't escape text properly.
             Y.YUI2.widget.TextNode.prototype.getContentHtml = function() {
                 var sb = [];
