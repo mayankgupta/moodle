@@ -571,9 +571,18 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         }
 
         // finally activate the chosen item
-        var scorm_first_url = tree.getRoot().children[0];
+        var scorm_first_url = null;
+        if (tree.rootNode.children[0].title != scoes_nav[launch_sco].url) {
+            var node = Y.one('a[title="' + scoes_nav[launch_sco].url + '"]');
+            if (node !== null) {
+                scorm_first_url = tree.getNodeById(node.ancestor('li').get('id'));
+            }
+        } else {
+            scorm_first_url = tree.rootNode.children[0];
+        }
+
         if (scorm_first_url == null) { // This is probably a single sco with no children (AICC Direct uses this).
-            scorm_first_url = tree.getRoot();
+            scorm_first_url = tree.rootNode;
         }
         scorm_first_url.title = scoes_nav[launch_sco].url;
         scorm_activate_item(scorm_first_url);
