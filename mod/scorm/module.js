@@ -475,9 +475,16 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             }
         }
         // TOC tree
-        var tree = new Y.YUI2.widget.TreeView('scorm_tree');
+        var toc = scorm_parse_toc_tree('#scorm_tree > ul');
+        // Empty container after parsing toc
+        var el = document.getElementById('scorm_tree');
+        el.innerHTML = '';
+        var tree = new Y.TreeView({
+            container: '#scorm_tree',
+            nodes: toc,
+            multiSelect: false
+        });
         scorm_tree_node = tree;
-        tree.singleNodeHighlight = true;
         tree.subscribe('labelClick', function(node) {
             if (node.title == '' || node.title == null) {
                 return; //this item has no navigation
