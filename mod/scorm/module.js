@@ -112,7 +112,10 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 return;
             }
             scorm_current_node = node;
-            scorm_current_node.highlight();
+            // Avoid recursive calls
+            if (!scorm_current_node.state.selected) {
+                scorm_current_node.select();   
+            }
 
             // remove any reference to the old API
             if (window.API) {
@@ -172,7 +175,9 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
             var left = scorm_layout_widget.getUnitByPosition('left');
             if (left.expand) {
-                scorm_current_node.focus();
+                if (!scorm_current_node.state.selected) {
+                    scorm_current_node.select();
+                }
             }
             if (scorm_hide_nav == false) {
                 scorm_fixnav();
