@@ -485,7 +485,9 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             multiSelect: false
         });
         scorm_tree_node = tree;
-        tree.subscribe('labelClick', function(node) {
+        // Trigger after instead of on, avoid recursive calls
+        tree.after('select', function(e) {
+            var node = e.node;
             if (node.title == '' || node.title == null) {
                 return; //this item has no navigation
             }
@@ -495,13 +497,13 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             }
         });
         if (!scorm_disable_toc) {
-            tree.subscribe('collapse', function(node) {
+            tree.on('close', function(e) {
                 if (scorm_bloody_labelclick) {
                     scorm_bloody_labelclick = false;
                     return false;
                 }
             });
-            tree.subscribe('expand', function(node) {
+            tree.subscribe('open', function(e) {
                 if (scorm_bloody_labelclick) {
                     scorm_bloody_labelclick = false;
                     return false;
