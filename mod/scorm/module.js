@@ -57,6 +57,17 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 node.open();
             });
         }
+        // YUI 3.9, gallery does not include the next, previous functions in Tree.Node class 
+        Y.Tree.Node.prototype.next = function () {
+            if (this.parent) {
+                return this.parent.children[this.index() + 1];
+            }
+        }
+        Y.Tree.Node.prototype.previous = function () {
+            if (this.parent) {
+                return this.parent.children[this.index() - 1];
+            }
+        }
 
         var scorm_parse_toc_tree = function(srcNode) {
             var sourceNode = Y.one(srcNode);
