@@ -50,24 +50,36 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
     Y.use('yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
+        Y.TreeView.prototype.getNodeByAttribute = function(attribute, value) {
+            var tree = this,
+                node = null;
+            var domnode = Y.one('a[' + attribute + '="' + value + '"]');
+                if (domnode !== null) {
+                    node = scorm_tree_node.getNodeById(domnode.ancestor('li').get('id'));
+                }
+            return node;
+        };
+
         Y.TreeView.prototype.openAll = function () {
             var tree = this;
             Y.all('.yui3-treeview-can-have-children').each(function() {
                 var node = tree.getNodeById(this.get('id'));
                 node.open();
             });
-        }
+        };
+
         // YUI 3.9, gallery does not include the next, previous functions in Tree.Node class 
         Y.Tree.Node.prototype.next = function () {
             if (this.parent) {
                 return this.parent.children[this.index() + 1];
             }
-        }
+        };
+
         Y.Tree.Node.prototype.previous = function () {
             if (this.parent) {
                 return this.parent.children[this.index() - 1];
             }
-        }
+        };
 
         var scorm_parse_toc_tree = function(srcNode) {
             var sourceNode = Y.one(srcNode);
