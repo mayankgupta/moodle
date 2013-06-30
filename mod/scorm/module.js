@@ -380,7 +380,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                     launch_sco = prevsibling;
                 }
                 return previous;
-            } else if (node.parent && node.parent.parent > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            } else if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
                 var parent = node.parent;
                 if (parent.title != scoes_nav[parentscoid].url) {
@@ -435,7 +435,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                     launch_sco = nextsibling;
                 }
                 return next;
-            } else if (node.parent && node.parent.parent > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            } else if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
                 var parent = node.parent;
                 if (parent.title != scoes_nav[parentscoid].url) {
