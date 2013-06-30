@@ -48,7 +48,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
     var scorm_bloody_labelclick = false;
     var scorm_nav_panel;
 
-    Y.use('button', 'dd-plugin', 'panel', 'yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
+    Y.use('button', 'dd-plugin', 'panel', 'yui2-resize', 'yui2-container', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
         Y.TreeView.prototype.getNodeByAttribute = function(attribute, value) {
             var tree = this,
