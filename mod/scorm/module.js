@@ -454,28 +454,34 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
         // Launch prev sco
         var scorm_launch_prev_sco = function() {
-                var result = null;
-                if (scoes_nav[launch_sco].flow == 1) {
+            var result = null;
+            if (scoes_nav[launch_sco].flow == 1) {
                 var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=backward';
                 result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
                 mod_scorm_seq = encodeURIComponent(result);
                 result = Y.JSON.parse (result);
                 if (typeof result.nextactivity.id != undefined) {
-                        var node = scorm_prev(scorm_tree_node.getHighlightedNode())
+                        var node = scorm_prev(scorm_tree_node.getSelectedNodes()[0])
                         if (node == null) {
-                                // Avoid use of TreeView for Navigation
-                                node = scorm_tree_node.getHighlightedNode();
+                            // Avoid use of TreeView for Navigation
+                            node = scorm_tree_node.getSelectedNodes()[0];
                         }
-                        node.title = scoes_nav[result.nextactivity.id].url;
+                        if (node.title != scoes_nav[result.nextactivity.id].url) {
+                            node = scorm_tree_node.getNodeByAttribute('title', scoes_nav[result.nextactivity.id].url);
+                            if (node === null) {
+                                node = scorm_tree_node.rootNode.children[0];
+                                node.title = scoes_nav[result.nextactivity.id].url;
+                            }
+                        }
                         launch_sco = result.nextactivity.id;
                         scorm_activate_item(node);
                         scorm_fixnav();
                 } else {
-                        scorm_activate_item(scorm_prev(scorm_tree_node.getHighlightedNode(), true));
+                        scorm_activate_item(scorm_prev(scorm_tree_node.getSelectedNodes()[0], true));
                 }
-             } else {
-                 scorm_activate_item(scorm_prev(scorm_tree_node.getHighlightedNode(), true));
-             }
+            } else {
+                scorm_activate_item(scorm_prev(scorm_tree_node.getSelectedNodes()[0], true));
+            }
         };
 
         // Launch next sco
