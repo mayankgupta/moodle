@@ -274,7 +274,7 @@ if ($result->prerequisites) {
 ?>
     </div> <!-- SCORM page -->
 <?php
-$scoes = scorm_get_toc_object($USER, $scorm, "", $sco->id, $mode, $attempt);
+$scoes = scorm_get_toc_object($USER, $scorm, $currentorg, $sco->id, $mode, $attempt);
 $adlnav = scorm_get_adlnav_json($scoes['scoes']);
 // NEW IMS TOC
 if (empty($scorm->popup) || $displaymode == 'popup') {
