@@ -641,7 +641,8 @@ M.mod_scorm.connectPrereqCallback = {
                     if (node !== null) {
                         snode = scorm_tree_node.getNodeById(node.ancestor('li').get('id'));
                     }
-                    if (snode) {
+                    // Do not let destroyed node to be selected
+                    if (snode && !snode.state.destroyed) {
                         snode.select();
                         var left = scorm_layout_widget.getUnitByPosition('left');
                         if (left.expand) {
