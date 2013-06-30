@@ -362,12 +362,18 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         };
 
         var scorm_prev = function(node, update_launch_sco) {
-            if (node.previousSibling && node.previousSibling.children.length &&
+            if (node.previous() && node.previous().children.length &&
                     typeof scoes_nav[launch_sco].prevscoid != 'undefined') {
-                var node = scorm_lastchild(node.previousSibling);
+                var node = scorm_lastchild(node.previous());
                 if (node) {
                     var prevscoid = scoes_nav[launch_sco].prevscoid;
-                    node.title = scoes_nav[prevscoid].url;
+                    if (node.title != scoes_nav[prevscoid].url) {
+                        node = scorm_tree_node.getNodeByAttribute('title', scoes_nav[prevscoid].url);
+                        if (node === null) {
+                            node = scorm_tree_node.rootNode.children[0];
+                            node.title = scoes_nav[prevscoid].url;
+                        }
+                    }
                     if (update_launch_sco) {
                         launch_sco = prevscoid;
                     }
