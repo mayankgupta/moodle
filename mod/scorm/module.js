@@ -63,6 +63,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             var sourceSelectors = {
                     child: '> li',
                     label: '> li, > a',
+                    textlabel : '> li, > span',
                     subtree: '> ul, > li'
                 },
                 children = [],
@@ -70,8 +71,8 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
             sourceNode.all(sel.child).each(function(childNode) {
                 var child = {},
-                    itemEl = childNode._node,
                     labelNode = childNode.one(sel.label),
+                    textNode = childNode.one(sel.textlabel),
                     subTreeNode = childNode.one(sel.subtree);
 
                 if (labelNode) {
@@ -81,18 +82,9 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                     if (title && title !== '#') {
                         child.title = title;
                     }
-                } else {
-                    // The selector didn not find a label node, so look for the first
-                    // text child of the item element.
-                    var childEl;
-                    for (var i = 0, length = itemEl.childNodes.length; i < length; i++) {
-                        childEl = itemEl.childNodes[i];
-
-                        if (childEl.nodeType === doc.TEXT_NODE) {
-                            item.label = Y.Escape.html(childEl.nodeValue);
-                            break;
-                        }
-                    }
+                } else if (textNode) {
+                    // The selector did not find a label node with anchor
+                    child.label = textNode.get('outerHTML');
                 }
 
                 if (subTreeNode) {
