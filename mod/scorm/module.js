@@ -334,14 +334,21 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         };
 
         var scorm_up = function(node, update_launch_sco) {
-            var node = scorm_tree_node.getHighlightedNode();
-            if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            var node = scorm_tree_node.getSelectedNodes()[0];
+            if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
-                node.parent.title = scoes_nav[parentscoid].url;
+                var parent = node.parent;
+                if (parent.title != scoes_nav[parentscoid].url) {
+                    parent = scorm_tree_node.getNodeByAttribute('title', scoes_nav[parentscoid].url);
+                    if (parent === null) {
+                        parent = scorm_tree_node.rootNode.children[0];
+                        parent.title = scoes_nav[parentscoid].url;
+                    }
+                }
                 if (update_launch_sco) {
                     launch_sco = parentscoid;
                 }
-                return node.parent;
+                return parent;
             }
             return null;
         };
