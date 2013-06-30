@@ -617,9 +617,9 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         // finally activate the chosen item
         var scorm_first_url = null;
         if (tree.rootNode.children[0].title != scoes_nav[launch_sco].url) {
-            var node = Y.one('a[title="' + scoes_nav[launch_sco].url + '"]');
+            var node = tree.getNodeByAttribute('title', scoes_nav[launch_sco].url);
             if (node !== null) {
-                scorm_first_url = tree.getNodeById(node.ancestor('li').get('id'));
+                scorm_first_url = node;
             }
         } else {
             scorm_first_url = tree.rootNode.children[0];
@@ -681,10 +681,7 @@ M.mod_scorm.connectPrereqCallback = {
                 scorm_tree_node.render();
                 scorm_tree_node.openAll();
                 if (stitle != null) {
-                    var node = Y.one('a[title="' + stitle + '"]');
-                    if (node !== null) {
-                        snode = scorm_tree_node.getNodeById(node.ancestor('li').get('id'));
-                    }
+                    snode = scorm_tree_node.getNodeByAttribute('title', stitle);
                     // Do not let destroyed node to be selected
                     if (snode && !snode.state.destroyed) {
                         snode.select();
