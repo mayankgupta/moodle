@@ -48,7 +48,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
     var scorm_bloody_labelclick = false;
     var scorm_nav_panel;
 
-    Y.use('dd-plugin', 'panel', 'yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
+    Y.use('button', 'dd-plugin', 'panel', 'yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
         Y.TreeView.prototype.getNodeByAttribute = function(attribute, value) {
             var tree = this,
@@ -634,27 +634,51 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             scorm_nav_panel.removeButton('close');
             scorm_nav_panel.plug(Y.Plugin.Drag, {handles: ['.yui3-widget-hd']});
             scorm_nav_panel.render();
-            scorm_buttons[0] = new Y.YUI2.widget.Button('nav_skipprev');
-            scorm_buttons[1] = new Y.YUI2.widget.Button('nav_prev');
-            scorm_buttons[2] = new Y.YUI2.widget.Button('nav_up');
-            scorm_buttons[3] = new Y.YUI2.widget.Button('nav_next');
-            scorm_buttons[4] = new Y.YUI2.widget.Button('nav_skipnext');
-            scorm_buttons[0].on('click', function(ev) {
-                scorm_activate_item(scorm_skipprev(scorm_tree_node.getSelectedNodes()[0], true));
+            scorm_buttons[0] = new Y.Button({
+                srcNode: '#nav_skipprev',
+                render: true,
+                on: {
+                        'click' : function(ev) {
+                            scorm_activate_item(scorm_skipprev(scorm_tree_node.getSelectedNodes()[0], true));
+                        }
+                    }
             });
-            scorm_buttons[1].on('click', function(ev) {
-                scorm_launch_prev_sco();
+            scorm_buttons[1] = new Y.Button({
+                srcNode: '#nav_prev',
+                render: true,
+                on: {
+                    'click' : function(ev) {
+                        scorm_launch_prev_sco();
+                    }
+                }
             });
-            scorm_buttons[2].on('click', function(ev) {
-                scorm_activate_item(scorm_up(scorm_tree_node.getSelectedNodes()[0], true));
+            scorm_buttons[2] = new Y.Button({
+                srcNode: '#nav_up',
+                render: true,
+                on: {
+                    'click' : function(ev) {
+                        scorm_activate_item(scorm_up(scorm_tree_node.getSelectedNodes()[0], true));
+                    }
+                }
             });
-            scorm_buttons[3].on('click', function(ev) {
-                scorm_launch_next_sco();
+            scorm_buttons[3] = new Y.Button({
+                srcNode: '#nav_next',
+                render: true,
+                on: {
+                    'click' : function(ev) {
+                        scorm_launch_next_sco();
+                    }
+                }
             });
-            scorm_buttons[4].on('click', function(ev) {
-                scorm_activate_item(scorm_skipnext(scorm_tree_node.getSelectedNodes()[0], true));
+            scorm_buttons[4] = new Y.Button({
+                srcNode: '#nav_skipnext',
+                render: true,
+                on: {
+                    'click' : function(ev) {
+                        scorm_activate_item(scorm_skipnext(scorm_tree_node.getSelectedNodes()[0], true));
+                    }
+                }
             });
-            scorm_nav_panel.render();
         }
 
         // finally activate the chosen item
