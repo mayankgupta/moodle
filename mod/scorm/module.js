@@ -290,7 +290,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             scorm_resize_frame();
 
             if (scorm_nav_panel) {
-                scorm_nav_panel.align('bl', 'bl');
+                scorm_nav_panel.align('#scorm_toc', [Y.WidgetPositionAlign.BL, Y.WidgetPositionAlign.BL]);
             }
         };
 
