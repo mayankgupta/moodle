@@ -1316,7 +1316,7 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
 
     $modestr = '';
     if ($mode == 'browse') {
-        $modestr = '&amp;mode='.$mode;
+        $modestr = '&mode='.$mode;
     }
 
     $result = array();
