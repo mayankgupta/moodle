@@ -48,7 +48,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
     var scorm_bloody_labelclick = false;
     var scorm_nav_panel;
 
-    Y.use('panel', 'yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
+    Y.use('dd-plugin', 'panel', 'yui2-resize', 'yui2-dragdrop', 'yui2-container', 'yui2-button', 'yui2-layout', 'gallery-sm-treeview', 'yui2-json', 'yui2-event', function(Y) {
 
         Y.TreeView.prototype.getNodeByAttribute = function(attribute, value) {
             var tree = this,
@@ -653,6 +653,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             //TODO: make some better&accessible buttons
             scorm_nav_panel.set('bodyContent', '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button><button id="nav_prev">&lt;</button><button id="nav_up">^</button><button id="nav_next">&gt;</button><button id="nav_skipnext">&gt;&gt;</button></span>');
             scorm_nav_panel.removeButton('close');
+            scorm_nav_panel.plug(Y.Plugin.Drag, {handles: ['.yui3-widget-hd']});
             scorm_nav_panel.render();
             scorm_buttons[0] = new Y.YUI2.widget.Button('nav_skipprev');
             scorm_buttons[1] = new Y.YUI2.widget.Button('nav_prev');
