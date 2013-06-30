@@ -634,19 +634,19 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             scorm_buttons[3] = new Y.YUI2.widget.Button('nav_next');
             scorm_buttons[4] = new Y.YUI2.widget.Button('nav_skipnext');
             scorm_buttons[0].on('click', function(ev) {
-                scorm_activate_item(scorm_skipprev(scorm_tree_node.getHighlightedNode(), true));
+                scorm_activate_item(scorm_skipprev(scorm_tree_node.getSelectedNodes()[0], true));
             });
             scorm_buttons[1].on('click', function(ev) {
                 scorm_launch_prev_sco();
             });
             scorm_buttons[2].on('click', function(ev) {
-                scorm_activate_item(scorm_up(scorm_tree_node.getHighlightedNode(), true));
+                scorm_activate_item(scorm_up(scorm_tree_node.getSelectedNodes()[0], true));
             });
             scorm_buttons[3].on('click', function(ev) {
                 scorm_launch_next_sco();
             });
             scorm_buttons[4].on('click', function(ev) {
-                scorm_activate_item(scorm_skipnext(scorm_tree_node.getHighlightedNode(), true));
+                scorm_activate_item(scorm_skipnext(scorm_tree_node.getSelectedNodes()[0], true));
             });
             scorm_nav_panel.render();
         }
