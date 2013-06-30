@@ -162,11 +162,28 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('hidetoc', $cfg_scorm->hidetoc_adv);
         $mform->disabledIf('hidetoc', 'scormtype', 'eq', SCORM_TYPE_AICCURL);
 
-        // Hide Navigation panel.
-        $mform->addElement('selectyesno', 'hidenav', get_string('hidenav', 'scorm'));
-        $mform->setDefault('hidenav', $cfg_scorm->hidenav);
-        $mform->setAdvanced('hidenav', $cfg_scorm->hidenav_adv);
-        $mform->disabledIf('hidenav', 'hidetoc', 'noteq', 0);
+        // Navigation panel display
+        $mform->addElement('select', 'nav', get_string('nav', 'scorm'), scorm_get_navigation_display_array());
+        $mform->addHelpButton('nav', 'nav', 'scorm');
+        $mform->setDefault('nav', $cfg_scorm->nav);
+        $mform->setAdvanced('nav', $cfg_scorm->nav_adv);
+        $mform->disabledIf('nav', 'hidetoc', 'noteq', SCORM_TOC_SIDE);
+
+        // Navigation panel position from left
+        $mform->addElement('text', 'navpositionleft', get_string('fromleft', 'scorm'), 'maxlength="5" size="5"');
+        $mform->setDefault('navpositionleft', $cfg_scorm->navpositionleft);
+        $mform->setType('navpositionleft', PARAM_INT);
+        $mform->setAdvanced('navpositionleft', $cfg_scorm->navpositionleft_adv);
+        $mform->disabledIf('navpositionleft', 'hidetoc', 'noteq', SCORM_TOC_SIDE);
+        $mform->disabledIf('navpositionleft', 'nav', 'noteq', SCORM_NAV_FLOATING);
+
+        // Navigation panel position from top
+        $mform->addElement('text', 'navpositiontop', get_string('fromtop', 'scorm'), 'maxlength="5" size="5"');
+        $mform->setDefault('navpositiontop', $cfg_scorm->navpositiontop);
+        $mform->setType('navpositiontop', PARAM_INT);
+        $mform->setAdvanced('navpositiontop', $cfg_scorm->navpositiontop_adv);
+        $mform->disabledIf('navpositiontop', 'hidetoc', 'noteq', SCORM_TOC_SIDE);
+        $mform->disabledIf('navpositiontop', 'nav', 'noteq', SCORM_NAV_FLOATING);
 
         // Display attempt status.
         $mform->addElement('select', 'displayattemptstatus', get_string('displayattemptstatus', 'scorm'), scorm_get_attemptstatus_array());

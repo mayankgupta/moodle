@@ -114,6 +114,51 @@ function xmldb_scorm_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2013081302, 'scorm');
     }
 
+    // Moodle v2.5.0 release upgrade line.
+    // Put any upgrade step following this.
+
+    if ($oldversion < 2013090100) {
+        $table = new xmldb_table('scorm');
+
+        $field = new xmldb_field('nav', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 1, 'hidetoc');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('navpositionleft', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, -100, 'nav');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('navpositiontop', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, -100, 'navpositionleft');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $scorms = $DB->get_recordset('scorm');
+        foreach($scorms as $scorm) {
+            if ($scorm->hidenav == 1) { // Update nav setting to disable navigation buttons.
+                $scorm->nav = 0;
+            } else { // Update nav setting to show floating navigation buttons under TOC.
+                $scorm->nav = 2;
+                $scorm->navpositionleft = 215;
+                $scorm->navpositiontop = 300;
+            }
+            $DB->update_record('scorm', $scorm);
+        }
+        $scorms->close();
+
+        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav'));
+        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav_adv'));
+
+        $field = new xmldb_field('hidenav');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2013090100, 'scorm');
+    }
+
     return true;
 }
 

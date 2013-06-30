@@ -152,6 +152,17 @@ function scorm_get_popup_display_array() {
 }
 
 /**
+ * Returns an array of the array of navigation buttons display options
+ *
+ * @return array an array of navigation buttons display options
+ */
+function scorm_get_navigation_display_array() {
+    return array(SCORM_NAV_DISABLED => get_string('no'),
+                 SCORM_NAV_UNDER_CONTENT => get_string('undercontent', 'scorm'),
+                 SCORM_NAV_FLOATING => get_string('floating', 'scorm'));
+}
+
+/**
  * Returns an array of the array of attempt options
  *
  * @return array an array of attempt options
@@ -1316,7 +1327,7 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
 
     $modestr = '';
     if ($mode == 'browse') {
-        $modestr = '&amp;mode='.$mode;
+        $modestr = '&mode='.$mode;
     }
 
     $result = array();
@@ -1424,7 +1435,7 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
     }
 
     // Get the parent scoes!
-    $result = scorm_get_toc_get_parent_child($result);
+    $result = scorm_get_toc_get_parent_child($result, $currentorg);
 
     // Be safe, prevent warnings from showing up while returning array
     if (!isset($scoid)) {
@@ -1434,10 +1445,15 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
     return array('scoes' => $result, 'usertracks' => $usertracks, 'scoid' => $scoid);
 }
 
-function scorm_get_toc_get_parent_child(&$result) {
+function scorm_get_toc_get_parent_child(&$result, $currentorg) {
     $final = array();
     $level = 0;
-    $prevparent = '/';
+    // organization is always the root, prevparent
+    if (!empty($currentorg)) {
+        $prevparent = $currentorg;
+    } else {
+        $prevparent = '/';
+    }
     ksort($result);
 
     foreach ($result as $sco) {
@@ -1567,7 +1583,7 @@ function scorm_format_toc_for_treeview($user, $scorm, $scoes, $usertracks, $cmid
                             if ($sco->scormtype == 'sco') {
                                 $result->toc .= $sco->statusicon.'&nbsp;<a href="'.$url.'">'.format_string($sco->title).'</a>'.$score."\n";
                             } else {
-                                $result->toc .= '&nbsp;<a href="'.$url.'">'.format_string($sco->title).'</a>'.$score."\n";
+                                $result->toc .= '&nbsp;<a data-scoid="'.$sco->id.'" href="'.$url.'">'.format_string($sco->title).'</a>'.$score."\n";
                             }
                         } else {
                             if ($sco->scormtype == 'sco') {
@@ -1579,9 +1595,9 @@ function scorm_format_toc_for_treeview($user, $scorm, $scoes, $usertracks, $cmid
                     } else {
                         if (!empty($sco->launch)) {
                             if ($sco->scormtype == 'sco') {
-                                $result->toc .= '<a title="'.$sco->url.'">'.$sco->statusicon.'&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
+                                $result->toc .= '<a data-scoid="'.$sco->id.'" title="'.$sco->url.'">'.$sco->statusicon.'&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
                             } else {
-                                $result->toc .= '<a title="'.$sco->url.'">&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
+                                $result->toc .= '<a data-scoid="'.$sco->id.'" title="'.$sco->url.'">&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
                             }
                         } else {
                             if ($sco->scormtype == 'sco') {
@@ -1690,8 +1706,9 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
     $organizationsco = null;
 
     if ($tocheader) {
-        $result->toc = "<div id=\"scorm_layout\">\n";
-        $result->toc .= "<div id=\"scorm_toc\">\n";
+        $result->toc = "<div id=\"scorm_layout\" class=\"yui3-g-r\">\n";
+        $result->toc .= "<div id=\"scorm_toc\" class=\"yui3-u-1-5\">\n";
+        $result->toc .= "<div id=\"scorm_toc_title\"></div>\n";
         $result->toc .= "<div id=\"scorm_tree\">\n";
     }
 
@@ -1741,8 +1758,12 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
     $result->attemptleft = $treeview->attemptleft;
 
     if ($tocheader) {
-        $result->toc .= "</div></div></div>\n";
+        $result->toc .= "</div></div>\n";
+        $result->toc .= "<div id=\"scorm_toc_toggle\">\n";
+        $result->toc .= "<button id=\"scorm_toc_toggle_btn\"></button></div>\n";
+        $result->toc .= "<div id=\"scorm_content\">";
         $result->toc .= "<div id=\"scorm_navpanel\"></div>\n";
+        $result->toc .= "</div></div>\n";
     }
 
     return $result;
