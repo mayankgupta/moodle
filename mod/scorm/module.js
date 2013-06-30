@@ -652,6 +652,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
             //TODO: make some better&accessible buttons
             scorm_nav_panel.set('bodyContent', '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button><button id="nav_prev">&lt;</button><button id="nav_up">^</button><button id="nav_next">&gt;</button><button id="nav_skipnext">&gt;&gt;</button></span>');
+            scorm_nav_panel.removeButton('close');
             scorm_nav_panel.render();
             scorm_buttons[0] = new Y.YUI2.widget.Button('nav_skipprev');
             scorm_buttons[1] = new Y.YUI2.widget.Button('nav_prev');
