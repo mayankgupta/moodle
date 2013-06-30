@@ -365,20 +365,35 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         };
 
         var scorm_skipprev = function(node, update_launch_sco) {
-            if (node.previousSibling && typeof scoes_nav[launch_sco].prevsibling != 'undefined') {
+            if (node.previous() && typeof scoes_nav[launch_sco].prevsibling != 'undefined') {
                 var prevsibling = scoes_nav[launch_sco].prevsibling;
-                node.previousSibling.title = scoes_nav[prevsibling].url;
+                var previous = node.previous();
+                var prevscoid = scoes_nav[launch_sco].prevscoid;
+                if (previous.title != scoes_nav[prevscoid].url) {
+                    previous = scorm_tree_node.getNodeByAttribute('title', scoes_nav[prevsibling].url);
+                    if (previous === null) {
+                        previous = scorm_tree_node.rootNode.children[0];
+                        previous.title = scoes_nav[prevsibling].url;
+                    }
+                }
                 if (update_launch_sco) {
                     launch_sco = prevsibling;
                 }
-                return node.previousSibling;
-            } else if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+                return previous;
+            } else if (node.parent && node.parent.parent > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
-                node.parent.title = scoes_nav[parentscoid].url;
+                var parent = node.parent;
+                if (parent.title != scoes_nav[parentscoid].url) {
+                    parent = scorm_tree_node.getNodeByAttribute('title', scoes_nav[parentscoid].url);
+                    if (parent === null) {
+                        parent = scorm_tree_node.rootNode.children[0];
+                        parent.title = scoes_nav[parentscoid].url;
+                    }
+                }
                 if (update_launch_sco) {
                     launch_sco = parentscoid;
                 }
-                return node.parent;
+                return parent;
             }
             return null;
         };
