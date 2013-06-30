@@ -1424,7 +1424,7 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
     }
 
     // Get the parent scoes!
-    $result = scorm_get_toc_get_parent_child($result);
+    $result = scorm_get_toc_get_parent_child($result, $currentorg);
 
     // Be safe, prevent warnings from showing up while returning array
     if (!isset($scoid)) {
