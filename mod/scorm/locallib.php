@@ -1434,10 +1434,15 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
     return array('scoes' => $result, 'usertracks' => $usertracks, 'scoid' => $scoid);
 }
 
-function scorm_get_toc_get_parent_child(&$result) {
+function scorm_get_toc_get_parent_child(&$result, $currentorg) {
     $final = array();
     $level = 0;
-    $prevparent = '/';
+    // organization is always the root, prevparent
+    if (!empty($currentorg)) {
+        $prevparent = $currentorg;
+    } else {
+        $prevparent = '/';
+    }
     ksort($result);
 
     foreach ($result as $sco) {
