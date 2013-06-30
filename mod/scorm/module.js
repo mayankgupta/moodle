@@ -442,19 +442,33 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         };
 
         var scorm_skipnext = function(node, update_launch_sco) {
-            if (node.nextSibling && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
+            if (node.next && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
                 var nextsibling = scoes_nav[launch_sco].nextsibling;
-                node.nextSibling.title = scoes_nav[nextsibling].url;
+                var next = node.next();
+                if (next.title != scoes_nav[nextsibling].url) {
+                    next = scorm_tree_node.getNodeByAttribute('title', scoes_nav[nextsibling].url);
+                    if (next === null) {
+                        next = scorm_tree_node.rootNode.children[0];
+                        next.title = scoes_nav[nextsibling].url;
+                    }
+                }
                 if (update_launch_sco) {
                     launch_sco = nextsibling;
                 }
-                return node.nextSibling;
-            } else if (node.depth > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+                return next;
+            } else if (node.parent && node.parent.parent > 0 && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
+                var parent = node.parent;
+                if (parent.title != scoes_nav[parentscoid].url) {
+                    parent = scorm_tree_node.getNodeByAttribute('title', scoes_nav[parentscoid].url);
+                    if (parent === null) {
+                        parent = scorm_tree_node.rootNode.children[0];
+                    }
+                }
                 if (update_launch_sco) {
                     launch_sco = parentscoid;
                 }
-                return scorm_skipnext(node.parent, update_launch_sco);
+                return scorm_skipnext(parent, update_launch_sco);
             }
             return null;
         };
