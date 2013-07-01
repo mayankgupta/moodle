@@ -496,7 +496,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                         var node = scorm_next(scorm_tree_node.getSelectedNodes()[0])
                         if (node == null) {
                             // Avoid use of TreeView for Navigation
-                            node = scorm_tree_node.getHighlightedNode();
+                            node = scorm_tree_node.getSelectedNodes()[0];
                         }
                         node = scorm_tree_node.getNodeByAttribute('title', scoes_nav[result.nextactivity.id].url);
                         if (node === null) {
