@@ -100,10 +100,14 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
                 if (labelNode) {
                     var title = labelNode.getAttribute('title');
+                    var scoid = labelNode.getAttribute('scoid');
                     child.label = labelNode.get('outerHTML');
                     // Will be good to change to url instead of title
                     if (title && title !== '#') {
                         child.title = title;
+                    }
+                    if (typeof scoid !== 'undefined') {
+                        child.scoid = scoid;
                     }
                 } else if (textNode) {
                     // The selector did not find a label node with anchor
@@ -584,6 +588,10 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             var node = e.node;
             if (node.title == '' || node.title == null) {
                 return; //this item has no navigation
+            }
+            // Update launch_sco
+            if (typeof node.scoid !== 'undefined') {
+                launch_sco = node.scoid;
             }
             scorm_activate_item(node);
             if (node.children.length) {
