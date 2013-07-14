@@ -986,6 +986,11 @@ function scorm_seq_rollup_rule_check ($sco, $userid, $action) {
 function scorm_seq_flow_tree_traversal($activity, $direction, $childrenflag, $prevdirection, $seq, $userid, $skip = false) {
     $revdirection = false;
     $parent = scorm_get_parent($activity);
+    if (!empty($parent)) {
+        $children = scorm_get_available_children($parent);
+    } else {
+        $children = array();
+    }
     $children = scorm_get_available_children($parent);
     $childrensize = count($children);
 
