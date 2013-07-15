@@ -252,38 +252,27 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             }
         };
 
-        var scorm_resize_layout = function(alsowidth) {
+        var scorm_resize_layout = function() {
             if (window_name) {
                 return;
             }
-
-            if (alsowidth) {
-                scorm_layout_widget.setStyle('width', '');
-                var newwidth = scorm_get_htmlelement_size('content', 'width');
-            }
+            
             // make sure that the max width of the TOC doesn't go to far
 
-            var left = scorm_layout_widget.getUnitByPosition('left');
-            var maxwidth = parseInt(Y.YUI2.util.Dom.getStyle('scorm_layout', 'width'));
-            left.set('maxWidth', (maxwidth - 50));
-            var cwidth = left.get('width');
+            var scorm_toc_node = Y.one('#scorm_toc'); //scorm_layout_widget.getUnitByPosition('left');
+            var maxwidth = parseInt(Y.one('#scorm_layout').getStyle('width'));
+            scorm_toc_node.setStyle('maxWidth', (maxwidth - 50));
+            var cwidth = scorm_toc_node.getStyle('width');
             if (cwidth > (maxwidth - 1)) {
-                left.set('width', (maxwidth - 50));
+                scorm_toc_node.setStyle('width', (maxwidth - 50));
             }
-
-            scorm_layout_widget.setStyle('height', '100%');
-            var center = scorm_layout_widget.getUnitByPosition('center');
-            center.setStyle('height', '100%');
-
-            // calculate the rough new height
-            newheight = Y.YUI2.util.Dom.getViewportHeight() -5;
+            
+            // calculate the rough new height from the viewport height
+            newheight = Y.one('body').get('winHeight') -5;
             if (newheight < 600) {
                 newheight = 600;
             }
-            scorm_layout_widget.set('height', newheight);
-
-            scorm_layout_widget.render();
-            scorm_resize_frame();
+            Y.one('#scorm_layout').setStyle('height', newheight);
 
             if (scorm_nav_panel) {
                 scorm_nav_panel.align('#scorm_toc', [Y.WidgetPositionAlign.BL, Y.WidgetPositionAlign.BL]);
