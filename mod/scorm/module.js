@@ -689,12 +689,16 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         scorm_activate_item(scorm_first_url);
 
         // resizing
-        scorm_resize_layout(false);
+        scorm_resize_layout();
 
+        // Collapse/expand TOC
+        Y.one('#scorm_toc_toggle').on('click', scorm_toggle_toc);
         // fix layout if window resized
-        window.onresize = function() {
-            scorm_resize_layout(true);
-        };
+        Y.on("windowresize", function() {
+            if (!scorm_disable_toc && !scorm_hide_toc) {
+                scorm_toggle_toc(true);
+            }
+        });
     });
 };
 
