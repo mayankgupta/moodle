@@ -238,6 +238,49 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                         scoes_nav[launch_sco].hidecontinue == 1));
         };
 
+        var scorm_toggle_toc = function(windowresize) {
+            var toc = Y.one('#scorm_toc');
+            var toc_disabled = toc.hasClass('disabled');
+            var disabled_by = toc.getAttribute('disabled-by');
+            if (windowresize === true) {
+                if (disabled_by === 'user') {
+                    return;
+                }
+                var body = Y.one('body');
+                if (body.get('winWidth') < 767) {
+                    toc.addClass('disabled');
+                    toc.setAttribute('disabled-by', 'screen-size');
+                    Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
+                    Y.one('#scorm_toc_toggle_btn').set('title', M.str.moodle.show);
+                    Y.one('#scorm_content').removeClass('yui3-u-3-4');
+                    Y.one('#scorm_content').addClass('yui3-u-1');
+                 } else if (body.get('winWidth') > 767) {
+                     toc.removeClass('disabled');
+                     toc.removeAttribute('disabled-by');
+                     Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
+                     Y.one('#scorm_toc_toggle_btn').set('title', M.str.moodle.hide);
+                     Y.one('#scorm_content').removeClass('yui3-u-1');
+                     Y.one('#scorm_content').addClass('yui3-u-3-4');
+                 }
+                 return;
+            }
+            if (toc_disabled) {
+                toc.removeClass('disabled');
+                toc.removeAttribute('disabled-by');
+                Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
+                Y.one('#scorm_toc_toggle_btn').set('title', M.str.moodle.hide);
+                Y.one('#scorm_content').removeClass('yui3-u-1');
+                Y.one('#scorm_content').addClass('yui3-u-3-4');
+            } else {
+                toc.addClass('disabled');
+                toc.setAttribute('disabled-by', 'user');
+                Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
+                Y.one('#scorm_toc_toggle_btn').set('title', M.str.moodle.show);
+                Y.one('#scorm_content').removeClass('yui3-u-3-4');
+                Y.one('#scorm_content').addClass('yui3-u-1');
+            }
+        };
+
         var scorm_resize_layout = function() {
             if (window_name) {
                 return;
