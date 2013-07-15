@@ -537,56 +537,28 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         mod_scorm_launch_next_sco = scorm_launch_next_sco;
 
         // layout
-        Y.YUI2.widget.LayoutUnit.prototype.STR_COLLAPSE = M.str.moodle.hide;
-        Y.YUI2.widget.LayoutUnit.prototype.STR_EXPAND = M.str.moodle.show;
-
         Y.one('#scorm_toc_title').setHTML(toc_title);
 
         if (scorm_disable_toc) {
-            scorm_layout_widget = new Y.YUI2.widget.Layout('scorm_layout', {
-                minWidth: 255,
-                minHeight: 600,
-                units: [
-                    { position: 'left', body: 'scorm_toc', header: toc_title, width: 0, resize: true, gutter: '0px 0px 0px 0px', collapse: false},
-                    { position: 'center', body: '<div id="scorm_content"></div>', gutter: '0px 0px 0px 0px', scroll: true}
-                ]
-            });
+            Y.one('#scorm_toc').addClass('disabled');
+            Y.one('#scorm_toc_toggle').addClass('disabled');
+            Y.one('#scorm_content').addClass('yui3-u-1');
         } else {
-            scorm_layout_widget = new Y.YUI2.widget.Layout('scorm_layout', {
-                minWidth: 255,
-                minHeight: 600,
-                units: [
-                    { position: 'left', body: 'scorm_toc', header: toc_title, width: 250, resize: true, gutter: '2px 5px 5px 2px', collapse: true, minWidth:250, maxWidth: 590},
-                    { position: 'center', body: '<div id="scorm_content"></div>', gutter: '2px 5px 5px 2px', scroll: true}
-                ]
-            });
+            Y.one('#scorm_toc').addClass('yui3-u-1-5');
+            Y.one('#scorm_toc_toggle').addClass('yui3-u-1-24');
+            Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
+            Y.one('#scorm_toc_toggle_btn').setAttribute('title', M.str.moodle.hide);
+            Y.one('#scorm_content').addClass('yui3-u-3-4');
         }
-
-        scorm_layout_widget.render();
-        var left = scorm_layout_widget.getUnitByPosition('left');
-        if (!scorm_disable_toc) {
-            left.on('collapse', function() {
-                scorm_resize_frame();
-            });
-            left.on('expand', function() {
-                scorm_resize_frame();
-            });
-        }
-        // ugly resizing hack that works around problems with resizing of iframes and objects
-        left._resize.on('startResize', function() {
-            var obj = Y.YUI2.util.Dom.get('scorm_object');
-            obj.style.display = 'none';
-        });
-        left._resize.on('endResize', function() {
-            var obj = Y.YUI2.util.Dom.get('scorm_object');
-            obj.style.display = 'block';
-            scorm_resize_frame();
-        });
 
         // hide the TOC if that is the default
         if (!scorm_disable_toc) {
             if (scorm_hide_toc == true) {
-               left.collapse();
+                Y.one('#scorm_toc').addClass('disabled');
+                Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
+                Y.one('#scorm_toc_toggle_btn').setAttribute('title', M.str.moodle.show);
+                Y.one('#scorm_content').removeClass('yui3-u-3-4');
+                Y.one('#scorm_content').addClass('yui3-u-1');
             }
         }
         // TOC tree
