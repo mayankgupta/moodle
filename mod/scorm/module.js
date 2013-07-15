@@ -519,6 +519,14 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             if (node.title == '' || node.title == null) {
                 return; //this item has no navigation
             }
+            // If item is already active, return; avoid recursive calls
+            if (Y.one('#scorm_data')) {
+                var scorm_active_url = Y.one('#scorm_object').get('data');
+                var node_full_url = M.cfg.wwwroot + '/mod/scorm/loadSCO.php?' + node.title;
+                if (node_full_url == scorm_active_url) {
+                    return;
+                }
+            }
             // Update launch_sco
             if (typeof node.scoid !== 'undefined') {
                 launch_sco = node.scoid;
