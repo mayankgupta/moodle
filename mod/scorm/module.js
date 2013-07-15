@@ -540,6 +540,8 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         Y.YUI2.widget.LayoutUnit.prototype.STR_COLLAPSE = M.str.moodle.hide;
         Y.YUI2.widget.LayoutUnit.prototype.STR_EXPAND = M.str.moodle.show;
 
+        Y.one('#scorm_toc_title').setHTML(toc_title);
+
         if (scorm_disable_toc) {
             scorm_layout_widget = new Y.YUI2.widget.Layout('scorm_layout', {
                 minWidth: 255,
