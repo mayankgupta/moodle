@@ -566,8 +566,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
         // navigation
         if (scorm_hide_nav == false) {
-            var left = scorm_layout_widget.getUnitByPosition('left');
-            navposition = Y.YUI2.util.Dom.getXY(left);
+            navposition = Y.one('#scorm_toc').getXY();
             navposition[1] += 200;
             scorm_nav_panel = new Y.Panel({
                 fillHeight: "body",
