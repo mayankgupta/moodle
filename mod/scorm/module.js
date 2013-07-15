@@ -218,12 +218,12 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
          * @return void
          */
         var scorm_fixnav = function() {
-            scorm_buttons[0].set('disabled', (scorm_skipprev(scorm_current_node) == null || scorm_skipprev(scorm_current_node).title == null ||
-                        scoes_nav[launch_sco].hideprevious == 1));
-            scorm_buttons[1].set('disabled', (scorm_prev(scorm_current_node) == null || scorm_prev(scorm_current_node).title == null ||
-                        scoes_nav[launch_sco].hideprevious == 1));
+            scorm_buttons[0].set('disabled', ((scorm_skipprev(scorm_current_node) == null) || (scorm_skipprev(scorm_current_node).title == null) ||
+                        (scoes_nav[launch_sco].hideprevious == 1)));
+            scorm_buttons[1].set('disabled', ((scorm_prev(scorm_current_node) === null) || (scorm_prev(scorm_current_node).title == null) || 
+                        (scoes_nav[launch_sco].hideprevious == 1)));
             scorm_buttons[2].set('disabled', (scorm_up(scorm_current_node) == null) || scorm_up(scorm_current_node).title == null);
-            scorm_buttons[3].set('disabled', (((scorm_next(scorm_current_node) == null || scorm_next(scorm_current_node).title == null) &&
+            scorm_buttons[3].set('disabled', ((scorm_next(scorm_current_node) == null) || ((scorm_next(scorm_current_node).title == null) &&
                         (scoes_nav[launch_sco].flow != 1)) || (scoes_nav[launch_sco].hidecontinue == 1)));
             scorm_buttons[4].set('disabled', (scorm_skipnext(scorm_current_node) == null || scorm_skipnext(scorm_current_node).title == null ||
                         scoes_nav[launch_sco].hidecontinue == 1));
@@ -425,7 +425,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         };
 
         var scorm_skipnext = function(node, update_launch_sco) {
-            if (node.next && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
+            if (node.next && typeof scoes_nav[launch_sco] !== 'undefined' && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
                 var nextsibling = scoes_nav[launch_sco].nextsibling;
                 var next = node.next();
                 if (next.title != scoes_nav[nextsibling].url) {
@@ -496,7 +496,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
                 mod_scorm_seq = encodeURIComponent(result);
                 result = Y.JSON.parse (result);
-                if (typeof result.nextactivity.id != undefined) {
+                if (typeof result.nextactivity !== 'undefined' && typeof result.nextactivity.id !== 'undefined') {
                         var node = scorm_next(scorm_tree_node.getSelectedNodes()[0])
                         if (node == null) {
                             // Avoid use of TreeView for Navigation
