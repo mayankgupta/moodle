@@ -208,7 +208,7 @@ $PAGE->requires->string_for_js('popupsblocked', 'scorm');
 $name = false;
 
 ?>
-    <div id="scormpage" class="yui3-g-r">
+    <div id="scormpage">
 
       <div id="tocbox">
         <div id='scormapi-parent'>

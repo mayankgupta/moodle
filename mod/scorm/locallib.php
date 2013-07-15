@@ -1695,7 +1695,7 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
     $organizationsco = null;
 
     if ($tocheader) {
-        $result->toc = "<div id=\"scorm_layout\">\n";
+        $result->toc = "<div id=\"scorm_layout\" class=\"yui3-g-r\">\n";
         $result->toc .= "<div id=\"scorm_toc\" class=\"yui3-u-1-5\">\n";
         $result->toc .= "<div id=\"scorm_toc_title\"></div>\n";
         $result->toc .= "<div id=\"scorm_tree\">\n";
