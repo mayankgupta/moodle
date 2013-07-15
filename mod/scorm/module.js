@@ -169,7 +169,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 document.getElementById('external-scormapi').src = api_url;
             }
 
-            var content = new Y.YUI2.util.Element('scorm_content');
+            var content = new Y.one('#scorm_content');
             try {
                 // first try IE way - it can not set name attribute later
                 // and also it has some restrictions on DOM access from object tag
@@ -205,7 +205,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                     mine.close()
                 }
             }
-            var old = Y.YUI2.util.Dom.get('scorm_object');
+            var old = Y.one('#scorm_object');
             if (old) {
                 if(window_name) {
                     var cwidth = scormplayerdata.cwidth;
@@ -219,14 +219,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 content.appendChild(obj);
             }
 
-            scorm_resize_frame();
-
-            var left = scorm_layout_widget.getUnitByPosition('left');
-            if (left.expand) {
-                if (!scorm_current_node.state.selected) {
-                    scorm_current_node.select();
-                }
-            }
             if (scorm_hide_nav == false) {
                 scorm_fixnav();
             }
