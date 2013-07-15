@@ -1749,7 +1749,8 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
 
     if ($tocheader) {
         $result->toc = "<div id=\"scorm_layout\">\n";
-        $result->toc .= "<div id=\"scorm_toc\">\n";
+        $result->toc .= "<div id=\"scorm_toc\" class=\"yui3-u-1-5\">\n";
+        $result->toc .= "<div id=\"scorm_toc_title\"></div>\n";
         $result->toc .= "<div id=\"scorm_tree\">\n";
     }
 
@@ -1799,7 +1800,10 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
     $result->attemptleft = $treeview->attemptleft;
 
     if ($tocheader) {
-        $result->toc .= "</div></div></div>\n";
+        $result->toc .= "</div></div>\n";
+        $result->toc .= "<div id=\"scorm_toc_toggle\">\n";
+        $result->toc .= "<button id=\"scorm_toc_toggle_btn\"></button></div>\n";
+        $result->toc .= "<div id=\"scorm_content\"></div></div>\n";
         $result->toc .= "<div id=\"scorm_navpanel\"></div>\n";
     }
 
