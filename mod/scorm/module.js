@@ -186,10 +186,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 else {
                     var obj = document.createElement('<iframe id="scorm_object" src="'+url_prefix + node.title+'">');
                 }
-                // fudge IE7 to redraw the screen
-                if (Y.YUI2.env.ua.ie > 5 && Y.YUI2.env.ua.ie < 8) {
-                    obj.attachEvent("onload", scorm_resize_parent);
-                }
             } catch (e) {
                 var obj = document.createElement('object');
                 obj.setAttribute('id', 'scorm_object');
@@ -242,16 +238,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                         scoes_nav[launch_sco].hidecontinue == 1));
         };
 
-        var scorm_resize_parent = function() {
-            // fudge  IE7 to redraw the screen
-            parent.resizeBy(-10, -10);
-            parent.resizeBy(10, 10);
-            var ifr = Y.YUI2.util.Dom.get('scorm_object');
-            if (ifr) {
-                ifr.detachEvent("onload", scorm_resize_parent);
-            }
-        };
-
         var scorm_resize_layout = function() {
             if (window_name) {
                 return;
@@ -276,38 +262,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
             if (scorm_nav_panel) {
                 scorm_nav_panel.align('#scorm_toc', [Y.WidgetPositionAlign.BL, Y.WidgetPositionAlign.BL]);
-            }
-        };
-
-        var scorm_get_htmlelement_size = function(el, prop) {
-            var val = Y.YUI2.util.Dom.getStyle(el, prop);
-            if (val == 'auto') {
-                if (el.get) {
-                    el = el.get('element'); // get real HTMLElement from YUI element
-                }
-                val = Y.YUI2.util.Dom.getComputedStyle(Y.YUI2.util.Dom.get(el), prop);
-            }
-            return parseInt(val);
-        };
-
-        var scorm_resize_frame = function() {
-            var obj = Y.YUI2.util.Dom.get('scorm_object');
-            if (obj) {
-                var content = scorm_layout_widget.getUnitByPosition('center').get('wrap');
-                // basically trap IE6 and 7
-                if (Y.YUI2.env.ua.ie > 5 && Y.YUI2.env.ua.ie < 8) {
-                    if( obj.style.setAttribute ) {
-                        obj.style.setAttribute("cssText", 'width: ' +(content.offsetWidth - 6)+'px; height: ' + (content.offsetHeight - 10)+'px;');
-                    }
-                    else {
-                        obj.style.setAttribute('width', (content.offsetWidth - 6)+'px', 0);
-                        obj.style.setAttribute('height', (content.offsetHeight - 10)+'px', 0);
-                    }
-                }
-                else {
-                    obj.style.width = (content.offsetWidth)+'px';
-                    obj.style.height = (content.offsetHeight - 10)+'px';
-                }
             }
         };
 
