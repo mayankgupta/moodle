@@ -597,11 +597,11 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         tree.openAll();
 
         // On getting the window, always set the focus on the current item
-        Y.YUI2.util.Event.on(window, 'focus', function (e) {
-            var current = scorm_tree_node.getHighlightedNode();
-            var left = scorm_layout_widget.getUnitByPosition('left');
-            if (current && left.expand) {
-                current.focus();
+        Y.one(Y.config.win).on('focus', function (e) {
+            var current = scorm_tree_node.getSelectedNodes()[0];
+            var toc_disabled = Y.one('#scorm_toc').hasClass('disabled');
+            if (current.id && !toc_disabled) {
+                Y.one('#' + current.id).focus();
             }
         });
 
