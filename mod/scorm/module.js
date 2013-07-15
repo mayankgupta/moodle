@@ -746,8 +746,8 @@ M.mod_scorm.connectPrereqCallback = {
                     // Do not let destroyed node to be selected
                     if (snode && !snode.state.destroyed) {
                         snode.select();
-                        var left = scorm_layout_widget.getUnitByPosition('left');
-                        if (left.expand) {
+                        var toc_disabled = Y.one('#scorm_toc').hasClass('disabled');
+                        if (!toc_disabled) {
                             if (!snode.state.selected) {
                                 snode.select();
                             }
