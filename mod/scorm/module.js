@@ -170,35 +170,16 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
             }
 
             var content = new Y.one('#scorm_content');
-            try {
-                // first try IE way - it can not set name attribute later
-                // and also it has some restrictions on DOM access from object tag
-                if (window_name || node.title == null) {
-                    var obj = document.createElement('<iframe id="scorm_object" src="">');
-                    if (window_name) {
-                        var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
-                        if(! mine) {
-                             alert(M.str.scorm.popupsblocked);
-                        }
-                        mine.close()
-                    }
-                }
-                else {
-                    var obj = document.createElement('<iframe id="scorm_object" src="'+url_prefix + node.title+'">');
-                }
-            } catch (e) {
-                var obj = document.createElement('object');
-                obj.setAttribute('id', 'scorm_object');
-                obj.setAttribute('type', 'text/html');
-                if (!window_name && node.title != null) {
-                    obj.setAttribute('data', url_prefix + node.title);
-                }
-                if (window_name) {
-                    var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
-                    if(! mine) {
-                         alert(M.str.scorm.popupsblocked);
-                    }
-                    mine.close()
+            var obj = document.createElement('iframe');
+            obj.setAttribute('id', 'scorm_object');
+            obj.setAttribute('type', 'text/html');
+            if (!window_name && node.title != null) {
+                obj.setAttribute('src', url_prefix + node.title);
+            }
+            if (window_name) {
+                var mine = window.open('','','width=1,height=1,left=0,top=0,scrollbars=no');
+                if(! mine) {
+                    alert(M.str.scorm.popupsblocked);
                 }
                 mine.close()
             }
