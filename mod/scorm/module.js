@@ -308,9 +308,6 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
             }
             Y.one('#scorm_layout').setStyle('height', newheight);
 
-            if (scorm_nav_panel) {
-                scorm_nav_panel.align('#scorm_toc', [Y.WidgetPositionAlign.BL, Y.WidgetPositionAlign.BL]);
-            }
         };
 
         // Handle AJAX Request
