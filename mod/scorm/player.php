@@ -286,7 +286,8 @@ if (empty($scorm->popup) || $displaymode == 'popup') {
         'fullpath' => '/mod/scorm/module.js',
         'requires' => array('json'),
     );
-    $PAGE->requires->js_init_call('M.mod_scorm.init', array($scorm->hidenav, $scorm->hidetoc, $result->toctitle, $name, $sco->id, $adlnav), false, $jsmodule);
+    $PAGE->requires->js_init_call('M.mod_scorm.init', array($scorm->hidenav, $scorm->hidetoc, $scorm->navpositiontype, $scorm->navpositionleft,
+                                                            $scorm->navpositiontop, $result->toctitle, $name, $sco->id, $adlnav), false, $jsmodule);
 }
 if (!empty($forcejs)) {
     echo $OUTPUT->box(get_string("forcejavascriptmessage", "scorm"), "generalbox boxaligncenter forcejavascriptmessage");
