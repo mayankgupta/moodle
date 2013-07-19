@@ -167,6 +167,13 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('hidenav', $cfg_scorm->hidenav_adv);
         $mform->disabledIf('hidenav', 'hidetoc', 'noteq', 0);
 
+        // Navigation panel position type
+        $mform->addElement('select', 'navpositiontype', get_string('navpositiontype', 'scorm'), scorm_get_navigation_display_array());
+        $mform->setDefault('navpositiontype', $cfg_scorm->navposition);
+        $mform->setAdvanced('navpositiontype', $cfg_scorm->navposition_adv);
+        $mform->disabledIf('navpositiontype', 'hidetoc', 'noteq', 0);
+        $mform->disabledIf('navpositiontype', 'hidenav', 'noteq', 0);
+
         // Display attempt status.
         $mform->addElement('select', 'displayattemptstatus', get_string('displayattemptstatus', 'scorm'), scorm_get_attemptstatus_array());
         $mform->addHelpButton('displayattemptstatus', 'displayattemptstatus', 'scorm');
