@@ -158,7 +158,8 @@ function scorm_get_popup_display_array() {
  */
 function scorm_get_navigation_display_array() {
     return array(0 => get_string('default'),
-    1 => get_string('custom', 'scorm'));
+                 1 => get_string('undercontent', 'scorm'),
+                 2 => get_string('custom', 'scorm'));
 }
 
 /**
