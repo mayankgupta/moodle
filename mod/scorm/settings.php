@@ -64,6 +64,18 @@ if ($ADMIN->fulltree) {
         get_string('hidenav', 'scorm'), get_string('hidenavdesc', 'scorm'),
         array('value' => 0, 'adv' => false), $yesno));
 
+    $settings->add(new admin_setting_configselect_with_advanced('scorm/navpositiontype',
+        get_string('navpositiontype', 'scorm'), get_string('navpositiontypedesc', 'scorm'),
+        array('value' => 0, 'adv' => true), scorm_get_navigation_display_array()));
+
+    $settings->add(new admin_setting_configtext_with_advanced('scorm/navpositionleft',
+        get_string('fromleft', 'scorm'), get_string('navpositionleft', 'scorm'),
+        array('value' => 100, 'adv' => true)));
+
+    $settings->add(new admin_setting_configtext_with_advanced('scorm/navpositiontop',
+        get_string('fromtop', 'scorm'), get_string('navpositiontop', 'scorm'),
+        array('value' => 100, 'adv' => true)));
+
     $settings->add(new admin_setting_configselect_with_advanced('scorm/displayattemptstatus',
         get_string('displayattemptstatus', 'scorm'), get_string('displayattemptstatusdesc', 'scorm'),
         array('value' => 1, 'adv' => false), $yesno));
