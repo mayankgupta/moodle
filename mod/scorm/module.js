@@ -535,6 +535,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
             Y.one('#scorm_toc_toggle_btn').setAttribute('title', M.str.moodle.hide);
             Y.one('#scorm_content').addClass('yui3-u-3-4');
+            scorm_toggle_toc(true);
         }
 
         // hide the TOC if that is the default
