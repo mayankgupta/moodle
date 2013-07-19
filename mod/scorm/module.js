@@ -248,10 +248,10 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
             var toc = Y.one('#scorm_toc');
             var toc_disabled = toc.hasClass('disabled');
             var disabled_by = toc.getAttribute('disabled-by');
+            // Remove width element style from resize handle
+            Y.one('#scorm_toc').setStyle('width', '');
+            Y.one('#scorm_content').setStyle('width', '');
             if (windowresize === true) {
-                // Remove width element style from resize handle
-                Y.one('#scorm_toc').setStyle('width', '');
-                Y.one('#scorm_content').setStyle('width', '');
                 if (disabled_by === 'user') {
                     return;
                 }
