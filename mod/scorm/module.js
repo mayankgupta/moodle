@@ -141,7 +141,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             scorm_current_node = node;
             // Avoid recursive calls
             if (!scorm_current_node.state.selected) {
-                scorm_current_node.select();   
+                scorm_current_node.select();
             }
 
             // remove any reference to the old API
@@ -288,10 +288,10 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             
             // make sure that the max width of the TOC doesn't go to far
 
-            var scorm_toc_node = Y.one('#scorm_toc'); //scorm_layout_widget.getUnitByPosition('left');
-            var maxwidth = parseInt(Y.one('#scorm_layout').getStyle('width'));
-            scorm_toc_node.setStyle('maxWidth', (maxwidth - 50));
-            var cwidth = scorm_toc_node.getStyle('width');
+            var scorm_toc_node = Y.one('#scorm_toc');
+            var maxwidth = parseInt(Y.one('#scorm_layout').getComputedStyle('width'));
+            scorm_toc_node.setStyle('maxWidth', (maxwidth - 200));
+            var cwidth = parseInt(scorm_toc_node.getComputedStyle('width'));
             if (cwidth > (maxwidth - 1)) {
                 scorm_toc_node.setStyle('width', (maxwidth - 50));
             }
