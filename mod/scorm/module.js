@@ -615,28 +615,33 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
 
         // navigation
         if (scorm_hide_nav == false) {
-            if (navposition_type == 0) {
-                var navposition = Y.one('#scorm_toc').getXY();
-                navposition[1] += 200;
+            // TODO: make some better&accessible buttons
+            var navbuttonshtml = '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button>&nbsp;<button id="nav_prev">&lt;</button>&nbsp;<button id="nav_up">^</button>&nbsp;<button id="nav_next">&gt;</button>&nbsp;<button id="nav_skipnext">&gt;&gt;</button></span>';
+            if (navposition_type == 1) {
+                Y.one('#scorm_navpanel').setHTML(navbuttonshtml);
             } else {
-                // Set user defined XY
-                var navposition = new Array();
-                navposition[0] = parseInt(navposition_left);
-                navposition[1] = parseInt(navposition_top);
+                if (navposition_type == 0) {
+                    var navposition = Y.one('#scorm_toc').getXY();
+                    navposition[1] += 200;
+                } else {
+                    // Set user defined XY
+                    var navposition = new Array();
+                    navposition[0] = parseInt(navposition_left);
+                    navposition[1] = parseInt(navposition_top);
+                }
+                scorm_nav_panel = new Y.Panel({
+                    fillHeight: "body",
+                    headerContent: M.str.scorm.navigation,
+                    visible: true, 
+                    xy: navposition,
+                    zIndex: 999,
+                });
+                scorm_nav_panel.set('bodyContent', navbuttonshtml);
+                scorm_nav_panel.removeButton('close');
+                scorm_nav_panel.plug(Y.Plugin.Drag, {handles: ['.yui3-widget-hd']});
+                scorm_nav_panel.render();
             }
-            scorm_nav_panel = new Y.Panel({
-                fillHeight: "body",
-                headerContent: M.str.scorm.navigation,
-                visible: true, 
-                xy: navposition,
-                zIndex: 999,
-            });
 
-            //TODO: make some better&accessible buttons
-            scorm_nav_panel.set('bodyContent', '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button><button id="nav_prev">&lt;</button><button id="nav_up">^</button><button id="nav_next">&gt;</button><button id="nav_skipnext">&gt;&gt;</button></span>');
-            scorm_nav_panel.removeButton('close');
-            scorm_nav_panel.plug(Y.Plugin.Drag, {handles: ['.yui3-widget-hd']});
-            scorm_nav_panel.render();
             scorm_buttons[0] = new Y.Button({
                 srcNode: '#nav_skipprev',
                 render: true,
