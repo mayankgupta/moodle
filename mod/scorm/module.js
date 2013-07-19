@@ -551,10 +551,11 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         }
 
         // TOC Resize handle
+        var layout_width = parseInt(Y.one('#scorm_layout').getComputedStyle('width'));
         var scorm_resize_handle = new Y.Resize({
             node: '#scorm_toc',
             handles: 'r',
-            defMinWidth: parseInt(Y.one('#scorm_toc').getComputedStyle('width'))
+            defMinWidth: 0.2 * layout_width
         });
         // TOC tree
         var toc = scorm_parse_toc_tree('#scorm_tree > ul');
@@ -704,9 +705,14 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
         Y.one('#scorm_toc_toggle').on('click', scorm_toggle_toc);
         // fix layout if window resized
         Y.on("windowresize", function() {
-            if (!scorm_disable_toc && !scorm_hide_toc) {
+            scorm_resize_layout();
+            var toc_displayed = Y.one('#scorm_toc').getComputedStyle('display') != 'none';
+            if ((!scorm_disable_toc && !scorm_hide_toc) || toc_displayed) {
                 scorm_toggle_toc(true);
             }
+            // Set 20% as minWidth constrain of TOC 
+            var layout_width = parseInt(Y.one('#scorm_layout').getComputedStyle('width'));
+            scorm_resize_handle.set('defMinWidth', 0.2 * layout_width);
         });
         // On resize drag, change width of scorm_content
         scorm_resize_handle.on('resize:resize', function() {
