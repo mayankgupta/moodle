@@ -182,7 +182,7 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('navpositionleft', $cfg_scorm->navpositionleft_adv);
         $mform->disabledIf('navpositionleft', 'hidetoc', 'noteq', 0);
         $mform->disabledIf('navpositionleft', 'hidenav', 'noteq', 0);
-        $mform->disabledIf('navpositionleft', 'navpositiontype', 'noteq', 1);
+        $mform->disabledIf('navpositionleft', 'navpositiontype', 'noteq', 2);
 
         // Navigation panel position from top
         $mform->addElement('text', 'navpositiontop', get_string('fromtop', 'scorm'), 'maxlength="5" size="5"');
@@ -191,7 +191,7 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('navpositiontop', $cfg_scorm->navpositiontop_adv);
         $mform->disabledIf('navpositiontop', 'hidetoc', 'noteq', 0);
         $mform->disabledIf('navpositiontop', 'hidenav', 'noteq', 0);
-        $mform->disabledIf('navpositiontop', 'navpositiontype', 'noteq', 1);
+        $mform->disabledIf('navpositiontop', 'navpositiontype', 'noteq', 2);
 
         // Display attempt status.
         $mform->addElement('select', 'displayattemptstatus', get_string('displayattemptstatus', 'scorm'), scorm_get_attemptstatus_array());
