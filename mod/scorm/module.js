@@ -245,6 +245,9 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
             var toc_disabled = toc.hasClass('disabled');
             var disabled_by = toc.getAttribute('disabled-by');
             if (windowresize === true) {
+                // Remove width element style from resize handle
+                Y.one('#scorm_toc').setStyle('width', '');
+                Y.one('#scorm_content').setStyle('width', '');
                 if (disabled_by === 'user') {
                     return;
                 }
@@ -548,6 +551,13 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 Y.one('#scorm_content').addClass('yui3-u-1');
             }
         }
+
+        // TOC Resize handle
+        var scorm_resize_handle = new Y.Resize({
+            node: '#scorm_toc',
+            handles: 'r',
+            defMinWidth: parseInt(Y.one('#scorm_toc').getComputedStyle('width'))
+        });
         // TOC tree
         var toc = scorm_parse_toc_tree('#scorm_tree > ul');
         // Empty container after parsing toc
