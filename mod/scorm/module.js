@@ -710,6 +710,12 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
                 scorm_toggle_toc(true);
             }
         });
+        // On resize drag, change width of scorm_content
+        scorm_resize_handle.on('resize:resize', function() {
+            var tocwidth = parseInt(Y.one('#scorm_toc').getComputedStyle('width'));
+            var layoutwidth = parseInt(Y.one('#scorm_layout').getStyle('width'));
+            Y.one('#scorm_content').setStyle('width', (layoutwidth - tocwidth - 60)); 
+        });
     });
 };
 
