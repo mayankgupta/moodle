@@ -152,6 +152,16 @@ function scorm_get_popup_display_array() {
 }
 
 /**
+ * Returns an array of the array of navigation buttons display options
+ *
+ * @return array an array of navigation buttons display options
+ */
+function scorm_get_navigation_display_array() {
+    return array(0 => get_string('default'),
+    1 => get_string('custom', 'scorm'));
+}
+
+/**
  * Returns an array of the array of attempt options
  *
  * @return array an array of attempt options
