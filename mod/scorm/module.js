@@ -618,8 +618,15 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
 
         // navigation
         if (scorm_hide_nav == false) {
-            navposition = Y.one('#scorm_toc').getXY();
-            navposition[1] += 200;
+            if (navposition_type == 0) {
+                var navposition = Y.one('#scorm_toc').getXY();
+                navposition[1] += 200;
+            } else {
+                // Set user defined XY
+                var navposition = new Array();
+                navposition[0] = parseInt(navposition_left);
+                navposition[1] = parseInt(navposition_top);
+            }
             scorm_nav_panel = new Y.Panel({
                 fillHeight: "body",
                 headerContent: M.str.scorm.navigation,
