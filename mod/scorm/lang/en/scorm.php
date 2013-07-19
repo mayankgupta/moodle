@@ -79,6 +79,7 @@ $string['contents'] = 'Contents';
 $string['coursepacket'] = 'Course package';
 $string['coursestruct'] = 'Course structure';
 $string['currentwindow'] = 'Current window';
+$string['custom'] = 'Custom';
 $string['datadir'] = 'Filesystem error: Can\'t create course data directory';
 $string['defaultdisplaysettings'] = 'Default display settings';
 $string['defaultgradesettings'] = 'Default grade settings';
@@ -130,6 +131,8 @@ $string['forcejavascriptmessage'] = 'JavaScript is required to view this object,
 $string['found'] = 'Manifest found';
 $string['frameheight'] = 'The height of the stage frame or window.';
 $string['framewidth'] = 'The width of the stage frame or window.';
+$string['fromleft'] = 'From left';
+$string['fromtop'] = 'From top';
 $string['fullscreen'] = 'Fill the whole screen';
 $string['general'] = 'General data';
 $string['gradeaverage'] = 'Average grade';
@@ -215,6 +218,10 @@ SCORM activities may be used
 * As an assessment tool';
 $string['modulename_link'] = 'mod/scorm/view';
 $string['modulenameplural'] = 'SCORM packages';
+$string['navpositiontype'] = 'Navigation buttons position';
+$string['navpositiontypedesc'] = 'This setting specifies the position of navigation buttons.';
+$string['navpositionleft'] = 'Position of navigation buttons from left in pixels.';
+$string['navpositiontop'] = 'Position of navigation buttons from top in pixels.';
 $string['newattempt'] = 'Start a new attempt';
 $string['next'] = 'Continue';
 $string['noactivity'] = 'Nothing to report';
