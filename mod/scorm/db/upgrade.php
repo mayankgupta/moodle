@@ -98,6 +98,26 @@ function xmldb_scorm_upgrade($oldversion) {
     // Moodle v2.5.0 release upgrade line.
     // Put any upgrade step following this.
 
+    if ($oldversion < 2013071900) {
+        $table = new xmldb_table('scorm');
+
+        $field = new xmldb_field('navpositiontype', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 0, 'hidenav');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('navpositionleft', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, 100, 'navposition');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('navpositiontop', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, 100, 'navpositionleft');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2013071900, 'scorm');
+    }
 
     return true;
 }
