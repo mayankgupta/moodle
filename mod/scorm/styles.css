@@ -16,6 +16,7 @@
 #page-mod-scorm-player #scormpage .scoframe {frameborder: 0;}
 #page-mod-scorm-player #scormpage #scorm_object {width: 98%; height: 98%;}
 #page-mod-scorm-player #scormpage #scorm_content {height: 100%;}
+#page-mod-scorm-player #scormpage #scorm_toc {position: relative;}
 
 #page-mod-scorm-player .toc,
 #page-mod-scorm-player .no-toc {width: 100%;}
