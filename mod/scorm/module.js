@@ -428,9 +428,9 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
         };
 
         var scorm_skipnext = function(node, update_launch_sco) {
-            if (node.next && typeof scoes_nav[launch_sco] !== 'undefined' && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
+            var next = node.next();
+            if (next && next.title && typeof scoes_nav[launch_sco] !== 'undefined' && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
                 var nextsibling = scoes_nav[launch_sco].nextsibling;
-                var next = node.next();
                 if (next.title != scoes_nav[nextsibling].url) {
                     next = scorm_tree_node.getNodeByAttribute('title', scoes_nav[nextsibling].url);
                     if (next === null) {
