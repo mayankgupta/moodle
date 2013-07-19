@@ -334,6 +334,7 @@ $string['typeaiccurl'] = 'External AICC URL';
 $string['typeexternal'] = 'External SCORM manifest';
 $string['typelocal'] = 'Uploaded package';
 $string['typelocalsync'] = 'Downloaded package';
+$string['undercontent'] = 'Under SCO content';
 $string['unziperror'] = 'An error occurs during package unzip';
 $string['updatefreq'] = 'Auto-update frequency';
 $string['updatefreq_help'] = 'This allows the external package to be automatically downloaded and updated';
