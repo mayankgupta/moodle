@@ -991,7 +991,6 @@ function scorm_seq_flow_tree_traversal($activity, $direction, $childrenflag, $pr
     } else {
         $children = array();
     }
-    $children = scorm_get_available_children($parent);
     $childrensize = count($children);
 
     if (($prevdirection != null && $prevdirection == 'backward') && ($children[$childrensize-1]->id == $activity->id)) {
