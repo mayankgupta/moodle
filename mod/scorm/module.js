@@ -214,7 +214,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
                     content.replaceChild(obj, old);
                 }
             } else {
-                content.appendChild(obj);
+                content.prepend(obj);
             }
 
             if (scorm_hide_nav == false) {
