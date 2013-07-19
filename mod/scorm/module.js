@@ -216,6 +216,10 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
             }
 
             if (scorm_hide_nav == false) {
+                if (navposition_type == 1) {
+                    // Set height to 95%, accomodate navigation buttons at bottom
+                    Y.one('#scorm_object').setStyle('height', '95%');
+                }
                 scorm_fixnav();
             }
         };
