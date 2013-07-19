@@ -721,7 +721,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, toc_title, window_name, launc
 
 M.mod_scorm.connectPrereqCallback = {
 
-    success: function(o) {
+    success: function(id, o) {
         Y.use(function(Y) {
             if (o.responseText !== undefined) {
                 if (scorm_tree_node && o.responseText) {
@@ -775,7 +775,7 @@ M.mod_scorm.connectPrereqCallback = {
         });
     },
 
-    failure: function(o) {
+    failure: function(id, o) {
         // TODO: do some sort of error handling.
     }
 
