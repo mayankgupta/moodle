@@ -1761,8 +1761,9 @@ function scorm_get_toc($user, $scorm, $cmid, $toclink=TOCJSLINK, $currentorg='',
         $result->toc .= "</div></div>\n";
         $result->toc .= "<div id=\"scorm_toc_toggle\">\n";
         $result->toc .= "<button id=\"scorm_toc_toggle_btn\"></button></div>\n";
-        $result->toc .= "<div id=\"scorm_content\"></div></div>\n";
+        $result->toc .= "<div id=\"scorm_content\">";
         $result->toc .= "<div id=\"scorm_navpanel\"></div>\n";
+        $result->toc .= "</div></div>\n";
     }
 
     return $result;
