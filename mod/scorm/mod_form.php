@@ -162,12 +162,6 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('hidetoc', $cfg_scorm->hidetoc_adv);
         $mform->disabledIf('hidetoc', 'scormtype', 'eq', SCORM_TYPE_AICCURL);
 
-        // Hide Navigation panel.
-        $mform->addElement('selectyesno', 'hidenav', get_string('hidenav', 'scorm'));
-        $mform->setDefault('hidenav', $cfg_scorm->hidenav);
-        $mform->setAdvanced('hidenav', $cfg_scorm->hidenav_adv);
-        $mform->disabledIf('hidenav', 'hidetoc', 'noteq', 0);
-
         // Navigation panel position type
         $mform->addElement('select', 'navpositiontype', get_string('navpositiontype', 'scorm'), scorm_get_navigation_display_array());
         $mform->setDefault('navpositiontype', $cfg_scorm->navposition);
