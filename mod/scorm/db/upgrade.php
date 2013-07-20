@@ -128,17 +128,17 @@ function xmldb_scorm_upgrade($oldversion) {
             $dbman->drop_field($table, $field);
         }
 
-        $field = new xmldb_field('nav', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 0, 'hidetoc');
+        $field = new xmldb_field('nav', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 1, 'hidetoc');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        $field = new xmldb_field('navpositionleft', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, 100, 'navposition');
+        $field = new xmldb_field('navpositionleft', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, -100, 'navposition');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        $field = new xmldb_field('navpositiontop', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, 100, 'navpositionleft');
+        $field = new xmldb_field('navpositiontop', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, -100, 'navpositionleft');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
