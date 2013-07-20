@@ -217,7 +217,7 @@ SCORM activities may be used
 $string['modulename_link'] = 'mod/scorm/view';
 $string['modulenameplural'] = 'SCORM packages';
 $string['nav'] = 'Show Navigation';
-$string['navdesc'] = 'This setting specifies show/hide navigation buttons and their position.';
+$string['navdesc'] = 'This setting specifies wether to show/hide navigation buttons and their position.';
 $string['navpositionleft'] = 'Position of navigation buttons from left in pixels.';
 $string['navpositiontop'] = 'Position of navigation buttons from top in pixels.';
 $string['newattempt'] = 'Start a new attempt';

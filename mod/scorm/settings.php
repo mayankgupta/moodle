@@ -61,7 +61,7 @@ if ($ADMIN->fulltree) {
         array('value' => 0, 'adv' => true), scorm_get_hidetoc_array()));
 
     $settings->add(new admin_setting_configselect_with_advanced('scorm/nav',
-        get_string('nav', 'scorm'), get_string('nav', 'scorm'),
+        get_string('nav', 'scorm'), get_string('navdesc', 'scorm'),
         array('value' => 1, 'adv' => true), scorm_get_navigation_display_array()));
 
     $settings->add(new admin_setting_configtext_with_advanced('scorm/navpositionleft',
