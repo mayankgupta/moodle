@@ -162,12 +162,11 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('hidetoc', $cfg_scorm->hidetoc_adv);
         $mform->disabledIf('hidetoc', 'scormtype', 'eq', SCORM_TYPE_AICCURL);
 
-        // Navigation panel position type
-        $mform->addElement('select', 'navpositiontype', get_string('navpositiontype', 'scorm'), scorm_get_navigation_display_array());
-        $mform->setDefault('navpositiontype', $cfg_scorm->navposition);
-        $mform->setAdvanced('navpositiontype', $cfg_scorm->navposition_adv);
-        $mform->disabledIf('navpositiontype', 'hidetoc', 'noteq', 0);
-        $mform->disabledIf('navpositiontype', 'hidenav', 'noteq', 0);
+        // Navigation panel display
+        $mform->addElement('select', 'nav', get_string('nav', 'scorm'), scorm_get_navigation_display_array());
+        $mform->setDefault('nav', $cfg_scorm->nav);
+        $mform->setAdvanced('nav', $cfg_scorm->nav_adv);
+        $mform->disabledIf('nav', 'hidetoc', 'noteq', 0);
 
         // Navigation panel position from left
         $mform->addElement('text', 'navpositionleft', get_string('fromleft', 'scorm'), 'maxlength="5" size="5"');
@@ -175,8 +174,7 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setType('navpositionleft', PARAM_INT);
         $mform->setAdvanced('navpositionleft', $cfg_scorm->navpositionleft_adv);
         $mform->disabledIf('navpositionleft', 'hidetoc', 'noteq', 0);
-        $mform->disabledIf('navpositionleft', 'hidenav', 'noteq', 0);
-        $mform->disabledIf('navpositionleft', 'navpositiontype', 'noteq', 2);
+        $mform->disabledIf('navpositionleft', 'nav', 'noteq', 2);
 
         // Navigation panel position from top
         $mform->addElement('text', 'navpositiontop', get_string('fromtop', 'scorm'), 'maxlength="5" size="5"');
@@ -184,8 +182,7 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setType('navpositiontop', PARAM_INT);
         $mform->setAdvanced('navpositiontop', $cfg_scorm->navpositiontop_adv);
         $mform->disabledIf('navpositiontop', 'hidetoc', 'noteq', 0);
-        $mform->disabledIf('navpositiontop', 'hidenav', 'noteq', 0);
-        $mform->disabledIf('navpositiontop', 'navpositiontype', 'noteq', 2);
+        $mform->disabledIf('navpositiontop', 'nav', 'noteq', 2);
 
         // Display attempt status.
         $mform->addElement('select', 'displayattemptstatus', get_string('displayattemptstatus', 'scorm'), scorm_get_attemptstatus_array());
