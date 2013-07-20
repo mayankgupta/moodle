@@ -29,12 +29,12 @@ scorm_layout_widget = null;
 
 M.mod_scorm = {};
 
-M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition_left, navposition_top, toc_title, window_name, launch_sco, scoes_nav) {
+M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, hide_toc, toc_title, window_name, launch_sco, scoes_nav) {
     var scorm_disable_toc = false;
     var scorm_hide_nav = true;
     var scorm_hide_toc = true;
     if (hide_toc == 0) {
-        if (hide_nav != 1) {
+        if (nav_display != 0) {
             scorm_hide_nav = false;
         }
         scorm_hide_toc = false;
@@ -199,7 +199,7 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
             }
 
             if (scorm_hide_nav == false) {
-                if (navposition_type == 1) {
+                if (nav_display == 2 && navposition_left > 0 && navposition_top > 0) {
                     // Set height to 95%, accomodate navigation buttons at bottom
                     Y.one('#scorm_object').setStyle('height', '95%');
                 }
@@ -611,10 +611,12 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
         if (scorm_hide_nav == false) {
             // TODO: make some better&accessible buttons
             var navbuttonshtml = '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button>&nbsp;<button id="nav_prev">&lt;</button>&nbsp;<button id="nav_up">^</button>&nbsp;<button id="nav_next">&gt;</button>&nbsp;<button id="nav_skipnext">&gt;&gt;</button></span>';
-            if (navposition_type == 1) {
+            if (nav_display == 1) {
                 Y.one('#scorm_navpanel').setHTML(navbuttonshtml);
             } else {
-                if (navposition_type == 0) {
+                // Nav panel is floating type
+                if (navposition_left < 0 && navposition_top < 0) {
+                    // Set default XY
                     var navposition = Y.one('#scorm_toc').getXY();
                     navposition[1] += 200;
                 } else {
