@@ -542,6 +542,11 @@ M.mod_scorm.init = function(Y, hide_nav, hide_toc, navposition_type, navposition
             handles: 'r',
             defMinWidth: 0.2 * layout_width
         });
+        // Allow scrolling content iframe on mobile browser
+        if (Y.UA.touchEnabled || Y.UA.mobile) {
+            Y.one('#scorm_content').setStyle('-webkit-overflow-scrolling', 'touch');
+            Y.one('#scorm_content').setStyle('overflow', 'scroll');
+        }
         // TOC tree
         var toc = scorm_parse_toc_tree('#scorm_tree > ul');
         // Empty container after parsing toc
