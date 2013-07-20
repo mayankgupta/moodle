@@ -25,7 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+<<<<<<< HEAD
 $module->version   = 2013083100;       // The current module version (Date: YYYYMMDDXX)
+=======
+$module->version   = 2013072000;       // The current module version (Date: YYYYMMDDXX)
+>>>>>>> MDL-40803 mod_scorm: update scorm version
 $module->requires  = 2013050100;    // Requires this Moodle version
 $module->component = 'mod_scorm'; // Full name of the plugin (used for diagnostics)
 $module->cron      = 300;
