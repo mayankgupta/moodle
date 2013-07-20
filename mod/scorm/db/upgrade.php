@@ -118,9 +118,17 @@ function xmldb_scorm_upgrade($oldversion) {
     // Put any upgrade step following this.
 
     if ($oldversion < 2013083100) {
+        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav'));
+        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav_adv'));
+
         $table = new xmldb_table('scorm');
 
-        $field = new xmldb_field('navpositiontype', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 0, 'hidenav');
+        $field = new xmldb_field('hidenav');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        $field = new xmldb_field('nav', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 0, 'hidetoc');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
@@ -135,7 +143,11 @@ function xmldb_scorm_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
+<<<<<<< HEAD
         upgrade_mod_savepoint(true, 2013083100, 'scorm');
+=======
+        upgrade_mod_savepoint(true, 2013072000, 'scorm');
+>>>>>>> MDL-40803 mod_scorm: add hidenav and nav setting changes to upgrade.php
     }
 
     return true;
