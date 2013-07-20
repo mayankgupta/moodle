@@ -133,7 +133,7 @@ function xmldb_scorm_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        $field = new xmldb_field('navpositionleft', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, -100, 'navposition');
+        $field = new xmldb_field('navpositionleft', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, -100, 'nav');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
