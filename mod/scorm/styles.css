@@ -15,7 +15,7 @@
 #page-mod-scorm-player #toctree { overflow: visible; }
 #page-mod-scorm-player #tochead {position: relative;text-align: center;top: 3px;height: 30px;}
 #page-mod-scorm-player #scormpage .scoframe {frameborder: 0;}
-#page-mod-scorm-player #scormpage #scorm_object {width: 98%; height: 98%;}
+#page-mod-scorm-player #scormpage #scorm_object {border: none; width: 98%; height: 98%;}
 #page-mod-scorm-player #scormpage #scorm_content {height: 100%;}
 #page-mod-scorm-player #scormpage #scorm_toc {position: relative;}
 #page-mod-scorm-player #scormpage #scorm_navpanel {text-align: center;}
