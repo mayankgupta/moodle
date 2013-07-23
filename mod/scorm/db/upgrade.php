@@ -118,15 +118,7 @@ function xmldb_scorm_upgrade($oldversion) {
     // Put any upgrade step following this.
 
     if ($oldversion < 2013083100) {
-        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav'));
-        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav_adv'));
-
         $table = new xmldb_table('scorm');
-
-        $field = new xmldb_field('hidenav');
-        if ($dbman->field_exists($table, $field)) {
-            $dbman->drop_field($table, $field);
-        }
 
         $field = new xmldb_field('nav', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 1, 'hidetoc');
         if (!$dbman->field_exists($table, $field)) {
@@ -143,11 +135,30 @@ function xmldb_scorm_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-<<<<<<< HEAD
-        upgrade_mod_savepoint(true, 2013083100, 'scorm');
-=======
-        upgrade_mod_savepoint(true, 2013072000, 'scorm');
->>>>>>> MDL-40803 mod_scorm: add hidenav and nav setting changes to upgrade.php
+        $scorms = $DB->get_recordset('scorm');
+        foreach($scorms as $scorm) {
+            if (isset($scorm->hidenav)) {
+                if ($scorm->hidenav == 0) { // Update nav setting to show floating navigation buttons under TOC.
+                    $scorm->nav = 2;
+                    $scorm->navpositionleft = 215;
+                    $scorm->navpositiontop = 300;
+                } else if ($scorm->hidenav == 1) { // Update nav setting to disable navigation buttons.
+                    $scorm->nav = 0;
+                }
+            }
+            $DB->update_record('scorm', $scorm);
+        }
+        $scorms->close();
+
+        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav'));
+        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav_adv'));
+
+        $field = new xmldb_field('hidenav');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2013072400, 'scorm');
     }
 
     return true;
