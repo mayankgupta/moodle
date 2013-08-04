@@ -199,7 +199,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             }
 
             if (scorm_hide_nav == false) {
-                if (nav_display == 2 && navposition_left > 0 && navposition_top > 0) {
+                if (nav_display == 1 && navposition_left > 0 && navposition_top > 0) {
                     // Set height to 95%, accomodate navigation buttons at bottom
                     Y.one('#scorm_object').setStyle('height', '95%');
                 }
