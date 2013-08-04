@@ -625,7 +625,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                     headerContent: M.str.scorm.navigation,
                     visible: true, 
                     xy: navposition,
-                    zIndex: 999,
+                    zIndex: 999
                 });
                 scorm_nav_panel.set('bodyContent', navbuttonshtml);
                 scorm_nav_panel.removeButton('close');

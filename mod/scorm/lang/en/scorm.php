@@ -216,8 +216,8 @@ SCORM activities may be used
 * As an assessment tool';
 $string['modulename_link'] = 'mod/scorm/view';
 $string['modulenameplural'] = 'SCORM packages';
-$string['nav'] = 'Show Navigation';
-$string['navdesc'] = 'This setting specifies wether to show/hide navigation buttons and their position.';
+$string['nav'] = 'Show Navigation in player';
+$string['navdesc'] = 'This setting specifies wether to show/hide navigation buttons and their position in player.';
 $string['navpositionleft'] = 'Position of navigation buttons from left in pixels.';
 $string['navpositiontop'] = 'Position of navigation buttons from top in pixels.';
 $string['newattempt'] = 'Start a new attempt';
