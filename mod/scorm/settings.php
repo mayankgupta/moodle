@@ -72,6 +72,10 @@ if ($ADMIN->fulltree) {
         get_string('fromtop', 'scorm'), get_string('navpositiontop', 'scorm'),
         array('value' => -100, 'adv' => true)));
 
+    $settings->add(new admin_setting_configtext_with_advanced('scorm/collapsetocwinsize',
+        get_string('collapsetocwinsize', 'scorm'), get_string('collapsetocwinsizedesc', 'scorm'),
+        array('value' => 767, 'adv' => true)));
+
     $settings->add(new admin_setting_configselect_with_advanced('scorm/displayattemptstatus',
         get_string('displayattemptstatus', 'scorm'), get_string('displayattemptstatusdesc', 'scorm'),
         array('value' => 1, 'adv' => false), $yesno));
