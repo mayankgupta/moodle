@@ -18,6 +18,8 @@
 #page-mod-scorm-player #scormpage #scorm_object {border: none; width: 98%; height: 98%;}
 #page-mod-scorm-player #scormpage #scorm_content {height: 100%;}
 #page-mod-scorm-player #scormpage #scorm_toc {position: relative;}
+#page-mod-scorm-player #scormpage #scorm_toc_title {font-size: 1.2em; font-weight: bold;}
+#page-mod-scorm-player #scormpage #scorm_tree {border-right: 5px solid rgb(239, 245, 255);}
 #page-mod-scorm-player #scormpage #scorm_navpanel {text-align: center;}
 
 #page-mod-scorm-player .toc,
