@@ -29,7 +29,7 @@ scorm_layout_widget = null;
 
 M.mod_scorm = {};
 
-M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, hide_toc, toc_title, window_name, launch_sco, scoes_nav) {
+M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, hide_toc, collapsetocwinsize, toc_title, window_name, launch_sco, scoes_nav) {
     var scorm_disable_toc = false;
     var scorm_hide_nav = true;
     var scorm_hide_toc = true;
@@ -238,14 +238,14 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                     return;
                 }
                 var body = Y.one('body');
-                if (body.get('winWidth') < 767) {
+                if (body.get('winWidth') < collapsetocwinsize) {
                     toc.addClass('disabled');
                     toc.setAttribute('disabled-by', 'screen-size');
                     Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
                     Y.one('#scorm_toc_toggle_btn').set('title', M.str.moodle.show);
                     Y.one('#scorm_content').removeClass('yui3-u-3-4');
                     Y.one('#scorm_content').addClass('yui3-u-1');
-                 } else if (body.get('winWidth') > 767) {
+                 } else if (body.get('winWidth') > collapsetocwinsize) {
                      toc.removeClass('disabled');
                      toc.removeAttribute('disabled-by');
                      Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
