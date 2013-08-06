@@ -164,6 +164,7 @@ class mod_scorm_mod_form extends moodleform_mod {
 
         // Navigation panel display
         $mform->addElement('select', 'nav', get_string('nav', 'scorm'), scorm_get_navigation_display_array());
+        $mform->addHelpButton('nav', 'nav', 'scorm');
         $mform->setDefault('nav', $cfg_scorm->nav);
         $mform->setAdvanced('nav', $cfg_scorm->nav_adv);
         $mform->disabledIf('nav', 'hidetoc', 'noteq', 0);
