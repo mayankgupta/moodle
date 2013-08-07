@@ -137,14 +137,12 @@ function xmldb_scorm_upgrade($oldversion) {
 
         $scorms = $DB->get_recordset('scorm');
         foreach($scorms as $scorm) {
-            if (isset($scorm->hidenav)) {
-                if ($scorm->hidenav == 0) { // Update nav setting to show floating navigation buttons under TOC.
-                    $scorm->nav = 2;
-                    $scorm->navpositionleft = 215;
-                    $scorm->navpositiontop = 300;
-                } else if ($scorm->hidenav == 1) { // Update nav setting to disable navigation buttons.
-                    $scorm->nav = 0;
-                }
+            if ($scorm->hidenav == 1) { // Update nav setting to disable navigation buttons.
+                $scorm->nav = 0;
+            } else { // Update nav setting to show floating navigation buttons under TOC.
+                $scorm->nav = 2;
+                $scorm->navpositionleft = 215;
+                $scorm->navpositiontop = 300;
             }
             $DB->update_record('scorm', $scorm);
         }

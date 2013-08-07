@@ -157,9 +157,9 @@ function scorm_get_popup_display_array() {
  * @return array an array of navigation buttons display options
  */
 function scorm_get_navigation_display_array() {
-    return array(0 => get_string('no'),
-                 1 => get_string('undercontent', 'scorm'),
-                 2 => get_string('floating', 'scorm'));
+    return array(SCORM_NAV_DISABLED => get_string('no'),
+                 SCORM_NAV_UNDER_CONTENT => get_string('undercontent', 'scorm'),
+                 SCORM_NAV_FLOATING => get_string('floating', 'scorm'));
 }
 
 /**
