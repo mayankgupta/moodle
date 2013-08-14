@@ -1583,7 +1583,7 @@ function scorm_format_toc_for_treeview($user, $scorm, $scoes, $usertracks, $cmid
                             if ($sco->scormtype == 'sco') {
                                 $result->toc .= $sco->statusicon.'&nbsp;<a href="'.$url.'">'.format_string($sco->title).'</a>'.$score."\n";
                             } else {
-                                $result->toc .= '&nbsp;<a scoid="'.$sco->id.'" href="'.$url.'">'.format_string($sco->title).'</a>'.$score."\n";
+                                $result->toc .= '&nbsp;<a data-scoid="'.$sco->id.'" href="'.$url.'">'.format_string($sco->title).'</a>'.$score."\n";
                             }
                         } else {
                             if ($sco->scormtype == 'sco') {
@@ -1595,9 +1595,9 @@ function scorm_format_toc_for_treeview($user, $scorm, $scoes, $usertracks, $cmid
                     } else {
                         if (!empty($sco->launch)) {
                             if ($sco->scormtype == 'sco') {
-                                $result->toc .= '<a scoid="'.$sco->id.'" title="'.$sco->url.'">'.$sco->statusicon.'&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
+                                $result->toc .= '<a data-scoid="'.$sco->id.'" title="'.$sco->url.'">'.$sco->statusicon.'&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
                             } else {
-                                $result->toc .= '<a scoid="'.$sco->id.'" title="'.$sco->url.'">&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
+                                $result->toc .= '<a data-scoid="'.$sco->id.'" title="'.$sco->url.'">&nbsp;'.format_string($sco->title).'&nbsp;'.$score.'</a>';
                             }
                         } else {
                             if ($sco->scormtype == 'sco') {
