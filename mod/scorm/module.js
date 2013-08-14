@@ -724,58 +724,58 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 M.mod_scorm.connectPrereqCallback = {
 
     success: function(id, o) {
-        Y.use(function(Y) {
-            if (o.responseText !== undefined) {
-                if (scorm_tree_node && o.responseText) {
-                    var snode = scorm_tree_node.getSelectedNodes()[0];
-                    var stitle = null;
-                    if (snode) {
-                        stitle = snode.title;
-                    }
-                    // all gone with clear, add new root node
-                    scorm_tree_node.clear(scorm_tree_node.createNode());
+        if (o.responseText !== undefined) {
+            var snode = null,
+                stitle = null;
+            if (scorm_tree_node && o.responseText) {
+                snode = scorm_tree_node.getSelectedNodes()[0];
+                stitle = null;
+                if (snode) {
+                    stitle = snode.title;
                 }
-                // make sure the temporary tree element is not there
-                var el_old_tree = document.getElementById('scormtree123');
-                if (el_old_tree) {
-                    el_old_tree.parentNode.removeChild(el_old_tree);
-                }
-                var el_new_tree = document.createElement('div');
-                var pagecontent = document.getElementById("page-content");
-                el_new_tree.setAttribute('id','scormtree123');
-                el_new_tree.innerHTML = o.responseText;
-                // make sure it doesnt show
-                el_new_tree.style.display = 'none';
-                pagecontent.appendChild(el_new_tree)
-                // ignore the first level element as this is the title
-                var startNode = el_new_tree.firstChild.firstChild;
-                if (startNode.tagName == 'LI') {
-                    // go back to the beginning
-                    startNode = el_new_tree;
-                }
-                //var sXML = new XMLSerializer().serializeToString(startNode);
-                var toc_source = Y.one('#scormtree123 > ul');
-                var toc = mod_scorm_parse_toc_tree(toc_source);
-                scorm_tree_node.appendNode(scorm_tree_node.rootNode, toc);
-                var el = document.getElementById('scormtree123');
-                el.parentNode.removeChild(el);
-                scorm_tree_node.render();
-                scorm_tree_node.openAll();
-                if (stitle != null) {
-                    snode = scorm_tree_node.getNodeByAttribute('title', stitle);
-                    // Do not let destroyed node to be selected
-                    if (snode && !snode.state.destroyed) {
-                        snode.select();
-                        var toc_disabled = Y.one('#scorm_toc').hasClass('disabled');
-                        if (!toc_disabled) {
-                            if (!snode.state.selected) {
-                                snode.select();
-                            }
+                // all gone with clear, add new root node
+                scorm_tree_node.clear(scorm_tree_node.createNode());
+            }
+            // make sure the temporary tree element is not there
+            var el_old_tree = document.getElementById('scormtree123');
+            if (el_old_tree) {
+                el_old_tree.parentNode.removeChild(el_old_tree);
+            }
+            var el_new_tree = document.createElement('div');
+            var pagecontent = document.getElementById("page-content");
+            el_new_tree.setAttribute('id','scormtree123');
+            el_new_tree.innerHTML = o.responseText;
+            // make sure it doesnt show
+            el_new_tree.style.display = 'none';
+            pagecontent.appendChild(el_new_tree);
+            // ignore the first level element as this is the title
+            var startNode = el_new_tree.firstChild.firstChild;
+            if (startNode.tagName == 'LI') {
+                // go back to the beginning
+                startNode = el_new_tree;
+            }
+            //var sXML = new XMLSerializer().serializeToString(startNode);
+            var toc_source = Y.one('#scormtree123 > ul');
+            var toc = mod_scorm_parse_toc_tree(toc_source);
+            scorm_tree_node.appendNode(scorm_tree_node.rootNode, toc);
+            var el = document.getElementById('scormtree123');
+            el.parentNode.removeChild(el);
+            scorm_tree_node.render();
+            scorm_tree_node.openAll();
+            if (stitle !== null) {
+                snode = scorm_tree_node.getNodeByAttribute('title', stitle);
+                // Do not let destroyed node to be selected
+                if (snode && !snode.state.destroyed) {
+                    snode.select();
+                    var toc_disabled = Y.one('#scorm_toc').hasClass('disabled');
+                    if (!toc_disabled) {
+                        if (!snode.state.selected) {
+                            snode.select();
                         }
                     }
                 }
             }
-        });
+        }
     },
 
     failure: function(id, o) {
