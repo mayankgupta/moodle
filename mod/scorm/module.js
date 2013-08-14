@@ -82,24 +82,23 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         };
 
         var scorm_parse_toc_tree = function(srcNode) {
-            var sourceSelectors = {
+            var SELECTORS = {
                     child: '> li',
                     label: '> li, > a',
                     textlabel : '> li, > span',
                     subtree: '> ul, > li'
                 },
-                children = [],
-                sel = sourceSelectors;
+                children = [];
 
-            srcNode.all(sel.child).each(function(childNode) {
+            srcNode.all(SELECTORS.child).each(function(childNode) {
                 var child = {},
-                    labelNode = childNode.one(sel.label),
-                    textNode = childNode.one(sel.textlabel),
-                    subTreeNode = childNode.one(sel.subtree);
+                    labelNode = childNode.one(SELECTORS.label),
+                    textNode = childNode.one(SELECTORS.textlabel),
+                    subTreeNode = childNode.one(SELECTORS.subtree);
 
                 if (labelNode) {
                     var title = labelNode.getAttribute('title');
-                    var scoid = labelNode.getAttribute('scoid');
+                    var scoid = labelNode.getData('scoid');
                     child.label = labelNode.get('outerHTML');
                     // Will be good to change to url instead of title
                     if (title && title !== '#') {
