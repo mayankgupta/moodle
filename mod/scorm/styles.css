@@ -16,6 +16,7 @@
 #page-mod-scorm-player #tochead {position: relative;text-align: center;top: 3px;height: 30px;}
 #page-mod-scorm-player #scormpage .scoframe {frameborder: 0;}
 #page-mod-scorm-player #scormpage #scorm_object {border: none; width: 98%; height: 98%;}
+#page-mod-scorm-player #scormpage #scorm_object.scorm_nav_under_content {height: 95%;}
 #page-mod-scorm-player #scormpage #scorm_content {height: 100%;}
 #page-mod-scorm-player #scormpage #scorm_toc {position: relative;}
 #page-mod-scorm-player #scormpage #scorm_toc_title {font-size: 1.2em; font-weight: bold;}
@@ -54,7 +55,15 @@
 .yui3-u-1,
 .yui3-u-3-4,
 .yui3-u-1-5,
-.yui3-u-1-24 {display: inline-block; zoom: 1; *display: inline; letter-spacing: normal; word-spacing: normal; vertical-align: top; text-rendering: auto;}
+.yui3-u-1-24 {
+    display: inline-block;
+    zoom: 1; 
+    *display: inline; 
+    letter-spacing: normal; 
+    word-spacing: normal; 
+    vertical-align: top; 
+    text-rendering: auto;
+}
 
 .yui3-u-1 {display: block;}
 
