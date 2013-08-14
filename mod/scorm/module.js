@@ -82,7 +82,6 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         };
 
         var scorm_parse_toc_tree = function(srcNode) {
-            var sourceNode = Y.one(srcNode);
             var sourceSelectors = {
                     child: '> li',
                     label: '> li, > a',
@@ -92,7 +91,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                 children = [],
                 sel = sourceSelectors;
 
-            sourceNode.all(sel.child).each(function(childNode) {
+            srcNode.all(sel.child).each(function(childNode) {
                 var child = {},
                     labelNode = childNode.one(sel.label),
                     textNode = childNode.one(sel.textlabel),
@@ -543,7 +542,8 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             defMinWidth: 0.2 * layout_width
         });
         // TOC tree
-        var toc = scorm_parse_toc_tree('#scorm_tree > ul');
+        var toc_source = Y.one('#scorm_tree > ul');
+        var toc = scorm_parse_toc_tree(toc_source);
         // Empty container after parsing toc
         var el = document.getElementById('scorm_tree');
         el.innerHTML = '';
@@ -755,7 +755,8 @@ M.mod_scorm.connectPrereqCallback = {
                     startNode = el_new_tree;
                 }
                 //var sXML = new XMLSerializer().serializeToString(startNode);
-                var toc = mod_scorm_parse_toc_tree('#scormtree123 > ul');
+                var toc_source = Y.one('#scormtree123 > ul');
+                var toc = mod_scorm_parse_toc_tree(toc_source);
                 scorm_tree_node.appendNode(scorm_tree_node.rootNode, toc);
                 var el = document.getElementById('scormtree123');
                 el.parentNode.removeChild(el);
