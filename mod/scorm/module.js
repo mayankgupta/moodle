@@ -34,7 +34,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
     var scorm_hide_nav = true;
     var scorm_hide_toc = true;
     if (hide_toc == 0) {
-        if (nav_display != 0) {
+        if (nav_display !== 0) {
             scorm_hide_nav = false;
         }
         scorm_hide_toc = false;
@@ -51,12 +51,11 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
     Y.use('button', 'dd-plugin', 'panel', 'resize', 'gallery-sm-treeview', function(Y) {
 
         Y.TreeView.prototype.getNodeByAttribute = function(attribute, value) {
-            var tree = this,
-                node = null;
-            var domnode = Y.one('a[' + attribute + '="' + value + '"]');
-                if (domnode !== null) {
-                    node = scorm_tree_node.getNodeById(domnode.ancestor('li').get('id'));
-                }
+            var node = null,
+                domnode = Y.one('a[' + attribute + '="' + value + '"]');
+            if (domnode !== null) {
+                node = scorm_tree_node.getNodeById(domnode.ancestor('li').get('id'));
+            }
             return node;
         };
 
@@ -68,7 +67,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             });
         };
 
-        // YUI 3.9, gallery does not include the next, previous functions in Tree.Node class 
+        // TODO: Remove next(), previous() prototype functions after YUI has been updated to 3.11.0 - MDL-41208
         Y.Tree.Node.prototype.next = function () {
             if (this.parent) {
                 return this.parent.children[this.index() + 1];
@@ -132,7 +131,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             if (Y.one('#scorm_object')) {
                 var scorm_active_url = Y.one('#scorm_object').getAttribute('src');
                 var node_full_url = M.cfg.wwwroot + '/mod/scorm/loadSCO.php?' + node.title;
-                if (node_full_url == scorm_active_url) {
+                if (node_full_url === scorm_active_url) {
                     return;
                 }
             }
@@ -167,7 +166,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                 document.getElementById('external-scormapi').src = api_url;
             }
 
-            var content = new Y.one('#scorm_content');
+            var content = Y.one('#scorm_content');
             var obj = document.createElement('iframe');
             obj.setAttribute('id', 'scorm_object');
             obj.setAttribute('type', 'text/html');
@@ -179,7 +178,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                 if(! mine) {
                     alert(M.str.scorm.popupsblocked);
                 }
-                mine.close()
+                mine.close();
             }
 
             var old = Y.one('#scorm_object');
@@ -211,16 +210,16 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
          * @return void
          */
         var scorm_fixnav = function() {
-            scorm_buttons[0].set('disabled', ((scorm_skipprev(scorm_current_node) == null) || (scorm_skipprev(scorm_current_node).parent.isRoot()) ||
-                        (scorm_skipprev(scorm_current_node).title == null) || (scoes_nav[launch_sco].hideprevious == 1)));
+            scorm_buttons[0].set('disabled', ((scorm_skipprev(scorm_current_node) === null) || (scorm_skipprev(scorm_current_node).parent.isRoot()) ||
+                        (scorm_skipprev(scorm_current_node).title === null) || (scoes_nav[launch_sco].hideprevious === 1)));
             scorm_buttons[1].set('disabled', ((scorm_prev(scorm_current_node) === null) || (scorm_skipprev(scorm_current_node).parent.isRoot()) ||
-                        (scorm_prev(scorm_current_node).title == null) || (scoes_nav[launch_sco].hideprevious == 1)));
-            scorm_buttons[2].set('disabled', (scorm_up(scorm_current_node) == null) || (scorm_up(scorm_current_node).parent.isRoot()) ||
-                         (scorm_up(scorm_current_node).title == null));
-            scorm_buttons[3].set('disabled', ((scorm_next(scorm_current_node) == null) || ((scorm_next(scorm_current_node).title == null) &&
-                        (scoes_nav[launch_sco].flow != 1)) || (scoes_nav[launch_sco].hidecontinue == 1)));
-            scorm_buttons[4].set('disabled', (scorm_skipnext(scorm_current_node) == null || scorm_skipnext(scorm_current_node).title == null ||
-                        scoes_nav[launch_sco].hidecontinue == 1));
+                        (scorm_prev(scorm_current_node).title === null) || (scoes_nav[launch_sco].hideprevious === 1)));
+            scorm_buttons[2].set('disabled', (scorm_up(scorm_current_node) === null) || (scorm_up(scorm_current_node).parent.isRoot()) ||
+                         (scorm_up(scorm_current_node).title === null));
+            scorm_buttons[3].set('disabled', ((scorm_next(scorm_current_node) === null) || ((scorm_next(scorm_current_node).title === null) &&
+                        (scoes_nav[launch_sco].flow !== 1)) || (scoes_nav[launch_sco].hidecontinue === 1)));
+            scorm_buttons[4].set('disabled', (scorm_skipnext(scorm_current_node) === null || scorm_skipnext(scorm_current_node).title === null ||
+                        scoes_nav[launch_sco].hidecontinue === 1));
         };
 
         var scorm_toggle_toc = function(windowresize) {
@@ -230,8 +229,8 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             var toc_disabled = toc.hasClass('disabled');
             var disabled_by = toc.getAttribute('disabled-by');
             // Remove width element style from resize handle
-            Y.one('#scorm_toc').setStyle('width', '');
-            Y.one('#scorm_content').setStyle('width', '');
+            toc.setStyle('width', '');
+            scorm_content.setStyle('width', '');
             if (windowresize === true) {
                 if (disabled_by === 'user') {
                     return;
@@ -279,9 +278,9 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             // make sure that the max width of the TOC doesn't go to far
 
             var scorm_toc_node = Y.one('#scorm_toc');
-            var maxwidth = parseInt(Y.one('#scorm_layout').getComputedStyle('width'));
+            var maxwidth = parseInt(Y.one('#scorm_layout').getComputedStyle('width'), 10);
             scorm_toc_node.setStyle('maxWidth', (maxwidth - 200));
-            var cwidth = parseInt(scorm_toc_node.getComputedStyle('width'));
+            var cwidth = parseInt(scorm_toc_node.getComputedStyle('width'), 10);
             if (cwidth > (maxwidth - 1)) {
                 scorm_toc_node.setStyle('width', (maxwidth - 50));
             }
@@ -303,11 +302,10 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         };
 
         var scorm_up = function(node, update_launch_sco) {
-            var node = scorm_tree_node.getSelectedNodes()[0];
-            if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid !== 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
                 var parent = node.parent;
-                if (parent.title != scoes_nav[parentscoid].url) {
+                if (parent.title !== scoes_nav[parentscoid].url) {
                     parent = scorm_tree_node.getNodeByAttribute('title', scoes_nav[parentscoid].url);
                     if (parent === null) {
                         parent = scorm_tree_node.rootNode.children[0];
@@ -332,11 +330,11 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 
         var scorm_prev = function(node, update_launch_sco) {
             if (node.previous() && node.previous().children.length &&
-                    typeof scoes_nav[launch_sco].prevscoid != 'undefined') {
-                var node = scorm_lastchild(node.previous());
+                    typeof scoes_nav[launch_sco].prevscoid !== 'undefined') {
+                node = scorm_lastchild(node.previous());
                 if (node) {
                     var prevscoid = scoes_nav[launch_sco].prevscoid;
-                    if (node.title != scoes_nav[prevscoid].url) {
+                    if (node.title !== scoes_nav[prevscoid].url) {
                         node = scorm_tree_node.getNodeByAttribute('title', scoes_nav[prevscoid].url);
                         if (node === null) {
                             node = scorm_tree_node.rootNode.children[0];
@@ -355,11 +353,11 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         };
 
         var scorm_skipprev = function(node, update_launch_sco) {
-            if (node.previous() && typeof scoes_nav[launch_sco].prevsibling != 'undefined') {
+            if (node.previous() && typeof scoes_nav[launch_sco].prevsibling !== 'undefined') {
                 var prevsibling = scoes_nav[launch_sco].prevsibling;
                 var previous = node.previous();
                 var prevscoid = scoes_nav[launch_sco].prevscoid;
-                if (previous.title != scoes_nav[prevscoid].url) {
+                if (previous.title !== scoes_nav[prevscoid].url) {
                     previous = scorm_tree_node.getNodeByAttribute('title', scoes_nav[prevsibling].url);
                     if (previous === null) {
                         previous = scorm_tree_node.rootNode.children[0];
@@ -370,10 +368,10 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                     launch_sco = prevsibling;
                 }
                 return previous;
-            } else if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            } else if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid !== 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
                 var parent = node.parent;
-                if (parent.title != scoes_nav[parentscoid].url) {
+                if (parent.title !== scoes_nav[parentscoid].url) {
                     parent = scorm_tree_node.getNodeByAttribute('title', scoes_nav[parentscoid].url);
                     if (parent === null) {
                         parent = scorm_tree_node.rootNode.children[0];
@@ -390,12 +388,12 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 
         var scorm_next = function(node, update_launch_sco) {
             if (node === false) {
-                return scorm_tree_node.rootNode.children[0];
+                return scorm_tree_node.children[0];
             }
             if (node.children.length && typeof scoes_nav[launch_sco].nextscoid != 'undefined') {
-                var node = node.children[0];
+                node = node.children[0];
                 var nextscoid = scoes_nav[launch_sco].nextscoid;
-                if (node.title != scoes_nav[nextscoid].url) {
+                if (node.title !== scoes_nav[nextscoid].url) {
                     node = scorm_tree_node.getNodeByAttribute('title', scoes_nav[nextscoid].url);
                     if (node === null) {
                         node = scorm_tree_node.rootNode.children[0];
@@ -412,9 +410,9 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 
         var scorm_skipnext = function(node, update_launch_sco) {
             var next = node.next();
-            if (next && next.title && typeof scoes_nav[launch_sco] !== 'undefined' && typeof scoes_nav[launch_sco].nextsibling != 'undefined') {
+            if (next && next.title && typeof scoes_nav[launch_sco] !== 'undefined' && typeof scoes_nav[launch_sco].nextsibling !== 'undefined') {
                 var nextsibling = scoes_nav[launch_sco].nextsibling;
-                if (next.title != scoes_nav[nextsibling].url) {
+                if (next.title !== scoes_nav[nextsibling].url) {
                     next = scorm_tree_node.getNodeByAttribute('title', scoes_nav[nextsibling].url);
                     if (next === null) {
                         next = scorm_tree_node.rootNode.children[0];
@@ -425,10 +423,10 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                     launch_sco = nextsibling;
                 }
                 return next;
-            } else if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid != 'undefined') {
+            } else if (node.parent && node.parent.parent && typeof scoes_nav[launch_sco].parentscoid !== 'undefined') {
                 var parentscoid = scoes_nav[launch_sco].parentscoid;
                 var parent = node.parent;
-                if (parent.title != scoes_nav[parentscoid].url) {
+                if (parent.title !== scoes_nav[parentscoid].url) {
                     parent = scorm_tree_node.getNodeByAttribute('title', scoes_nav[parentscoid].url);
                     if (parent === null) {
                         parent = scorm_tree_node.rootNode.children[0];
@@ -445,18 +443,18 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         // Launch prev sco
         var scorm_launch_prev_sco = function() {
             var result = null;
-            if (scoes_nav[launch_sco].flow == 1) {
+            if (scoes_nav[launch_sco].flow === 1) {
                 var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=backward';
                 result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
                 mod_scorm_seq = encodeURIComponent(result);
                 result = Y.JSON.parse (result);
                 if (typeof result.nextactivity.id != undefined) {
-                        var node = scorm_prev(scorm_tree_node.getSelectedNodes()[0])
+                        var node = scorm_prev(scorm_tree_node.getSelectedNodes()[0]);
                         if (node == null) {
                             // Avoid use of TreeView for Navigation
                             node = scorm_tree_node.getSelectedNodes()[0];
                         }
-                        if (node.title != scoes_nav[result.nextactivity.id].url) {
+                        if (node.title !== scoes_nav[result.nextactivity.id].url) {
                             node = scorm_tree_node.getNodeByAttribute('title', scoes_nav[result.nextactivity.id].url);
                             if (node === null) {
                                 node = scorm_tree_node.rootNode.children[0];
@@ -477,14 +475,14 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         // Launch next sco
         var scorm_launch_next_sco = function () {
             var result = null;
-            if (scoes_nav[launch_sco].flow == 1) {
+            if (scoes_nav[launch_sco].flow === 1) {
                 var datastring = scoes_nav[launch_sco].url + '&function=scorm_seq_flow&request=forward';
                 result = scorm_ajax_request(M.cfg.wwwroot + '/mod/scorm/datamodels/sequencinghandler.php?', datastring);
                 mod_scorm_seq = encodeURIComponent(result);
                 result = Y.JSON.parse (result);
                 if (typeof result.nextactivity !== 'undefined' && typeof result.nextactivity.id !== 'undefined') {
-                    var node = scorm_next(scorm_tree_node.getSelectedNodes()[0])
-                    if (node == null) {
+                    var node = scorm_next(scorm_tree_node.getSelectedNodes()[0]);
+                    if (node === null) {
                         // Avoid use of TreeView for Navigation
                         node = scorm_tree_node.getSelectedNodes()[0];
                     }
@@ -506,7 +504,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 
         mod_scorm_launch_prev_sco = scorm_launch_prev_sco;
         mod_scorm_launch_next_sco = scorm_launch_next_sco;
-
+ 
         var cssclasses = {
                 // YUI grid class: use 100% of the available width to show only content, TOC hidden
                 scorm_grid_content_toc_hidden: 'yui3-u-1',
@@ -551,7 +549,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         }
 
         // TOC Resize handle
-        var layout_width = parseInt(Y.one('#scorm_layout').getComputedStyle('width'));
+        var layout_width = parseInt(Y.one('#scorm_layout').getComputedStyle('width'), 10);
         var scorm_resize_handle = new Y.Resize({
             node: '#scorm_toc',
             handles: 'r',
@@ -579,7 +577,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             if (Y.one('#scorm_data')) {
                 var scorm_active_url = Y.one('#scorm_object').getAttribute('src');
                 var node_full_url = M.cfg.wwwroot + '/mod/scorm/loadSCO.php?' + node.title;
-                if (node_full_url == scorm_active_url) {
+                if (node_full_url === scorm_active_url) {
                     return;
                 }
             }
@@ -621,25 +619,28 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         // navigation
         if (scorm_hide_nav == false) {
             // TODO: make some better&accessible buttons
-            var navbuttonshtml = '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button>&nbsp;<button id="nav_prev">&lt;</button>&nbsp;<button id="nav_up">^</button>&nbsp;<button id="nav_next">&gt;</button>&nbsp;<button id="nav_skipnext">&gt;&gt;</button></span>';
-            if (nav_display == 1) {
+            var navbuttonshtml = '<span id="scorm_nav"><button id="nav_skipprev">&lt;&lt;</button>&nbsp;<button id="nav_prev">&lt;</button>'
+                    + '&nbsp;<button id="nav_up">^</button>&nbsp;<button id="nav_next">&gt;</button>'
+                    + '&nbsp;<button id="nav_skipnext">&gt;&gt;</button></span>';
+            if (nav_display === 1) {
                 Y.one('#scorm_navpanel').setHTML(navbuttonshtml);
             } else {
                 // Nav panel is floating type
+                var navposition = null;
                 if (navposition_left < 0 && navposition_top < 0) {
                     // Set default XY
-                    var navposition = Y.one('#scorm_toc').getXY();
+                    navposition = Y.one('#scorm_toc').getXY();
                     navposition[1] += 200;
                 } else {
                     // Set user defined XY
-                    var navposition = new Array();
-                    navposition[0] = parseInt(navposition_left);
-                    navposition[1] = parseInt(navposition_top);
+                    navposition = [];
+                    navposition[0] = parseInt(navposition_left, 10);
+                    navposition[1] = parseInt(navposition_top, 10);
                 }
                 scorm_nav_panel = new Y.Panel({
                     fillHeight: "body",
                     headerContent: M.util.get_string('navigation', 'scorm'),
-                    visible: true, 
+                    visible: true,
                     xy: navposition,
                     zIndex: 999
                 });
@@ -698,7 +699,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 
         // finally activate the chosen item
         var scorm_first_url = null;
-        if (tree.rootNode.children[0].title != scoes_nav[launch_sco].url) {
+        if (tree.rootNode.children[0].title !== scoes_nav[launch_sco].url) {
             var node = tree.getNodeByAttribute('title', scoes_nav[launch_sco].url);
             if (node !== null) {
                 scorm_first_url = node;
@@ -721,19 +722,19 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         // fix layout if window resized
         Y.on("windowresize", function() {
             scorm_resize_layout();
-            var toc_displayed = Y.one('#scorm_toc').getComputedStyle('display') != 'none';
+            var toc_displayed = Y.one('#scorm_toc').getComputedStyle('display') !== 'none';
             if ((!scorm_disable_toc && !scorm_hide_toc) || toc_displayed) {
                 scorm_toggle_toc(true);
             }
             // Set 20% as minWidth constrain of TOC 
-            var layout_width = parseInt(Y.one('#scorm_layout').getComputedStyle('width'));
+            var layout_width = parseInt(Y.one('#scorm_layout').getComputedStyle('width'), 10);
             scorm_resize_handle.set('defMinWidth', 0.2 * layout_width);
         });
         // On resize drag, change width of scorm_content
         scorm_resize_handle.on('resize:resize', function() {
-            var tocwidth = parseInt(Y.one('#scorm_toc').getComputedStyle('width'));
-            var layoutwidth = parseInt(Y.one('#scorm_layout').getStyle('width'));
-            Y.one('#scorm_content').setStyle('width', (layoutwidth - tocwidth - 60)); 
+            var tocwidth = parseInt(Y.one('#scorm_toc').getComputedStyle('width'), 10);
+            var layoutwidth = parseInt(Y.one('#scorm_layout').getStyle('width'), 10);
+            Y.one('#scorm_content').setStyle('width', (layoutwidth - tocwidth - 60));
         });
     });
 };
