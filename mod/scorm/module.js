@@ -130,7 +130,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             }
             // Check if the item is already active, avoid recursive calls
             if (Y.one('#scorm_object')) {
-                var scorm_active_url = Y.one('#scorm_object').get('data');
+                var scorm_active_url = Y.one('#scorm_object').getAttribute('src');
                 var node_full_url = M.cfg.wwwroot + '/mod/scorm/loadSCO.php?' + node.title;
                 if (node_full_url == scorm_active_url) {
                     return;
@@ -560,7 +560,7 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             }
             // If item is already active, return; avoid recursive calls
             if (Y.one('#scorm_data')) {
-                var scorm_active_url = Y.one('#scorm_object').get('data');
+                var scorm_active_url = Y.one('#scorm_object').getAttribute('src');
                 var node_full_url = M.cfg.wwwroot + '/mod/scorm/loadSCO.php?' + node.title;
                 if (node_full_url == scorm_active_url) {
                     return;
