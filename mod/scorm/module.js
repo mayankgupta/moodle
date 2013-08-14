@@ -197,9 +197,8 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             }
 
             if (scorm_hide_nav == false) {
-                if (nav_display == 1 && navposition_left > 0 && navposition_top > 0) {
-                    // Set height to 95%, accomodate navigation buttons at bottom
-                    Y.one('#scorm_object').setStyle('height', '95%');
+                if (nav_display === 1 && navposition_left > 0 && navposition_top > 0) {
+                    Y.one('#scorm_object').addClass(cssclasses.scorm_nav_under_content);
                 }
                 scorm_fixnav();
             }
@@ -226,6 +225,8 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
 
         var scorm_toggle_toc = function(windowresize) {
             var toc = Y.one('#scorm_toc');
+            var scorm_content = Y.one('#scorm_content');
+            var scorm_toc_toggle_btn = Y.one('#scorm_toc_toggle_btn');
             var toc_disabled = toc.hasClass('disabled');
             var disabled_by = toc.getAttribute('disabled-by');
             // Remove width element style from resize handle
@@ -237,36 +238,36 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
                 }
                 var body = Y.one('body');
                 if (body.get('winWidth') < collapsetocwinsize) {
-                    toc.addClass('disabled');
-                    toc.setAttribute('disabled-by', 'screen-size');
-                    Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
-                    Y.one('#scorm_toc_toggle_btn').set('title', M.util.get_string('show', 'moodle'));
-                    Y.one('#scorm_content').removeClass('yui3-u-3-4');
-                    Y.one('#scorm_content').addClass('yui3-u-1');
-                 } else if (body.get('winWidth') > collapsetocwinsize) {
-                     toc.removeClass('disabled');
-                     toc.removeAttribute('disabled-by');
-                     Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
-                     Y.one('#scorm_toc_toggle_btn').set('title', M.util.get_string('hide', 'moodle'));
-                     Y.one('#scorm_content').removeClass('yui3-u-1');
-                     Y.one('#scorm_content').addClass('yui3-u-3-4');
-                 }
-                 return;
+                    toc.addClass(cssclasses.disabled)
+                        .setAttribute('disabled-by', 'screen-size');
+                    scorm_toc_toggle_btn.setHTML('&gt;')
+                        .set('title', M.util.get_string('show', 'moodle'));
+                    scorm_content.removeClass(cssclasses.scorm_grid_content_toc_visible)
+                        .addClass(cssclasses.scorm_grid_content_toc_hidden);
+                } else if (body.get('winWidth') > collapsetocwinsize) {
+                    toc.removeClass(cssclasses.disabled)
+                        .removeAttribute('disabled-by');
+                    scorm_toc_toggle_btn.setHTML('&lt;')
+                        .set('title', M.util.get_string('hide', 'moodle'));
+                    scorm_content.removeClass(cssclasses.scorm_grid_content_toc_hidden)
+                        .addClass(cssclasses.scorm_grid_content_toc_visible);
+                }
+                return;
             }
             if (toc_disabled) {
-                toc.removeClass('disabled');
-                toc.removeAttribute('disabled-by');
-                Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
-                Y.one('#scorm_toc_toggle_btn').set('title', M.util.get_string('hide', 'moodle'));
-                Y.one('#scorm_content').removeClass('yui3-u-1');
-                Y.one('#scorm_content').addClass('yui3-u-3-4');
+                toc.removeClass(cssclasses.disabled)
+                    .removeAttribute('disabled-by');
+                scorm_toc_toggle_btn.setHTML('&lt;')
+                    .set('title', M.util.get_string('hide', 'moodle'));
+                scorm_content.removeClass(cssclasses.scorm_grid_content_toc_hidden)
+                    .addClass(cssclasses.scorm_grid_content_toc_visible);
             } else {
-                toc.addClass('disabled');
-                toc.setAttribute('disabled-by', 'user');
-                Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
-                Y.one('#scorm_toc_toggle_btn').set('title', M.util.get_string('show', 'moodle'));
-                Y.one('#scorm_content').removeClass('yui3-u-3-4');
-                Y.one('#scorm_content').addClass('yui3-u-1');
+                toc.addClass(cssclasses.disabled)
+                    .setAttribute('disabled-by', 'user');
+                scorm_toc_toggle_btn.setHTML('&gt;')
+                    .set('title', M.util.get_string('show', 'moodle'));
+                scorm_content.removeClass(cssclasses.scorm_grid_content_toc_visible)
+                    .addClass(cssclasses.scorm_grid_content_toc_hidden);
             }
         };
 
@@ -506,30 +507,46 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
         mod_scorm_launch_prev_sco = scorm_launch_prev_sco;
         mod_scorm_launch_next_sco = scorm_launch_next_sco;
 
+        var cssclasses = {
+                // YUI grid class: use 100% of the available width to show only content, TOC hidden
+                scorm_grid_content_toc_hidden: 'yui3-u-1',
+                // YUI grid class: use 1/5 of the available width to show TOC
+                scorm_grid_toc: 'yui3-u-1-5',
+                // YUI grid class: use 1/24 of the available width to show TOC toggle button
+                scorm_grid_toggle: 'yui3-u-1-24',
+                // YUI grid class: use 3/4 of the available width to show content, TOC visible
+                scorm_grid_content_toc_visible: 'yui3-u-3-4',
+                // Reduce height of #scorm_object to accomodate nav buttons under content
+                scorm_nav_under_content: 'scorm_nav_under_content',
+                disabled: 'disabled'
+            };
         // layout
         Y.one('#scorm_toc_title').setHTML(toc_title);
 
         if (scorm_disable_toc) {
-            Y.one('#scorm_toc').addClass('disabled');
-            Y.one('#scorm_toc_toggle').addClass('disabled');
-            Y.one('#scorm_content').addClass('yui3-u-1');
+            Y.one('#scorm_toc').addClass(cssclasses.disabled);
+            Y.one('#scorm_toc_toggle').addClass(cssclasses.disabled);
+            Y.one('#scorm_content').addClass(cssclasses.scorm_grid_content_toc_hidden);
         } else {
-            Y.one('#scorm_toc').addClass('yui3-u-1-5');
-            Y.one('#scorm_toc_toggle').addClass('yui3-u-1-24');
-            Y.one('#scorm_toc_toggle_btn').setHTML('&lt;');
-            Y.one('#scorm_toc_toggle_btn').setAttribute('title', M.util.get_string('hide', 'moodle'));
-            Y.one('#scorm_content').addClass('yui3-u-3-4');
+            Y.one('#scorm_toc').addClass(cssclasses.scorm_grid_toc);
+            Y.one('#scorm_toc_toggle').addClass(cssclasses.scorm_grid_toggle);
+            Y.one('#scorm_toc_toggle_btn')
+                .setHTML('&lt;')
+                .setAttribute('title', M.util.get_string('hide', 'moodle'));
+            Y.one('#scorm_content').addClass(cssclasses.scorm_grid_content_toc_visible);
             scorm_toggle_toc(true);
         }
 
         // hide the TOC if that is the default
         if (!scorm_disable_toc) {
             if (scorm_hide_toc == true) {
-                Y.one('#scorm_toc').addClass('disabled');
-                Y.one('#scorm_toc_toggle_btn').setHTML('&gt;');
-                Y.one('#scorm_toc_toggle_btn').setAttribute('title', M.util.get_string('show', 'moodle'));
-                Y.one('#scorm_content').removeClass('yui3-u-3-4');
-                Y.one('#scorm_content').addClass('yui3-u-1');
+                Y.one('#scorm_toc').addClass(cssclasses.disabled);
+                Y.one('#scorm_toc_toggle_btn')
+                    .setHTML('&gt;')
+                    .setAttribute('title', M.util.get_string('show', 'moodle'));
+                Y.one('#scorm_content')
+                    .removeClass(cssclasses.scorm_grid_content_toc_visible)
+                    .addClass(cssclasses.scorm_grid_content_toc_hidden);
             }
         }
 
