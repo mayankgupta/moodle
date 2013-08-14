@@ -83,6 +83,8 @@ $collapsetocwinsize = get_config('scorm', 'collapsetocwinsize');
 if (empty($collapsetocwinsize)) {
     // Set as default window size to collapse TOC
     $collapsetocwinsize = 767;
+} else {
+    $collapsetocwinsize = intval($collapsetocwinsize);
 }
 
 require_login($course, false, $cm);
@@ -286,6 +288,7 @@ if (empty($scorm->popup) || $displaymode == 'popup') {
         'fullpath' => '/mod/scorm/module.js',
         'requires' => array('json'),
     );
+    $scorm->nav = intval($scorm->nav);
     $PAGE->requires->js_init_call('M.mod_scorm.init', array($scorm->nav, $scorm->navpositionleft, $scorm->navpositiontop, $scorm->hidetoc,
                                                             $collapsetocwinsize, $result->toctitle, $name, $sco->id, $adlnav), false, $jsmodule);
 }
