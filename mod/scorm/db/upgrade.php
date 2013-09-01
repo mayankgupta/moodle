@@ -117,7 +117,7 @@ function xmldb_scorm_upgrade($oldversion) {
     // Moodle v2.5.0 release upgrade line.
     // Put any upgrade step following this.
 
-    if ($oldversion < 2013083100) {
+    if ($oldversion < 2013090100) {
         $table = new xmldb_table('scorm');
 
         $field = new xmldb_field('nav', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, true, null, 1, 'hidetoc');
@@ -156,7 +156,7 @@ function xmldb_scorm_upgrade($oldversion) {
             $dbman->drop_field($table, $field);
         }
 
-        upgrade_mod_savepoint(true, 2013072400, 'scorm');
+        upgrade_mod_savepoint(true, 2013090100, 'scorm');
     }
 
     return true;

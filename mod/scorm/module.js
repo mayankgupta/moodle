@@ -229,8 +229,8 @@ M.mod_scorm.init = function(Y, nav_display, navposition_left, navposition_top, h
             var toc_disabled = toc.hasClass('disabled');
             var disabled_by = toc.getAttribute('disabled-by');
             // Remove width element style from resize handle
-            toc.setStyle('width', '');
-            scorm_content.setStyle('width', '');
+            toc.setStyle('width', null);
+            scorm_content.setStyle('width', null);
             if (windowresize === true) {
                 if (disabled_by === 'user') {
                     return;
