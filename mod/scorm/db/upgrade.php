@@ -135,27 +135,26 @@ function xmldb_scorm_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        $scorms = $DB->get_recordset('scorm');
-        foreach($scorms as $scorm) {
-            if ($scorm->hidenav == 1) { // Update nav setting to disable navigation buttons.
-                $scorm->nav = 0;
-            } else { // Update nav setting to show floating navigation buttons under TOC.
-                $scorm->nav = 2;
-                $scorm->navpositionleft = 215;
-                $scorm->navpositiontop = 300;
-            }
-            $DB->update_record('scorm', $scorm);
-        }
-        $scorms->close();
-
-        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav'));
-        $DB->delete_records('config_plugins', array('plugin' => 'scorm', 'name' => 'hidenav_adv'));
-
         $field = new xmldb_field('hidenav');
         if ($dbman->field_exists($table, $field)) {
+            // Update nav setting to disable navigation buttons.
+            $DB->set_field('scorm', 'nav', 0, array('hidenav' => 1));
+            // Update nav setting to show floating navigation buttons under TOC.
+            $DB->set_field('scorm', 'nav', 2, array('hidenav' => 0));
+            $DB->set_field('scorm', 'navpositionleft', 215, array('hidenav' => 0));
+            $DB->set_field('scorm', 'navpositiontop', 300, array('hidenav' => 0));
+            // Drop hidenav field.
             $dbman->drop_field($table, $field);
         }
 
+        $params = array('plugin' => 'scorm', 'name' => 'hidenav');
+        if ($DB->record_exists('config_plugins', $params)) {
+            $DB->delete_records('config_plugins', $params);
+        }
+        $params = array('plugin' => 'scorm', 'name' => 'hidenav_adv');
+        if ($DB->record_exists('config_plugins', $params)) {
+            $DB->delete_records('config_plugins', $params);
+        }
         upgrade_mod_savepoint(true, 2013090100, 'scorm');
     }
 

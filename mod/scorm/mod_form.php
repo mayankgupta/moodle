@@ -162,14 +162,14 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->setAdvanced('hidetoc', $cfg_scorm->hidetoc_adv);
         $mform->disabledIf('hidetoc', 'scormtype', 'eq', SCORM_TYPE_AICCURL);
 
-        // Navigation panel display
+        // Navigation panel display.
         $mform->addElement('select', 'nav', get_string('nav', 'scorm'), scorm_get_navigation_display_array());
         $mform->addHelpButton('nav', 'nav', 'scorm');
         $mform->setDefault('nav', $cfg_scorm->nav);
         $mform->setAdvanced('nav', $cfg_scorm->nav_adv);
         $mform->disabledIf('nav', 'hidetoc', 'noteq', SCORM_TOC_SIDE);
 
-        // Navigation panel position from left
+        // Navigation panel position from left.
         $mform->addElement('text', 'navpositionleft', get_string('fromleft', 'scorm'), 'maxlength="5" size="5"');
         $mform->setDefault('navpositionleft', $cfg_scorm->navpositionleft);
         $mform->setType('navpositionleft', PARAM_INT);
@@ -177,7 +177,7 @@ class mod_scorm_mod_form extends moodleform_mod {
         $mform->disabledIf('navpositionleft', 'hidetoc', 'noteq', SCORM_TOC_SIDE);
         $mform->disabledIf('navpositionleft', 'nav', 'noteq', SCORM_NAV_FLOATING);
 
-        // Navigation panel position from top
+        // Navigation panel position from top.
         $mform->addElement('text', 'navpositiontop', get_string('fromtop', 'scorm'), 'maxlength="5" size="5"');
         $mform->setDefault('navpositiontop', $cfg_scorm->navpositiontop);
         $mform->setType('navpositiontop', PARAM_INT);

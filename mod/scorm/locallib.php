@@ -1448,7 +1448,7 @@ function scorm_get_toc_object($user, $scorm, $currentorg='', $scoid='', $mode='n
 function scorm_get_toc_get_parent_child(&$result, $currentorg) {
     $final = array();
     $level = 0;
-    // organization is always the root, prevparent
+    // Organization is always the root, prevparent.
     if (!empty($currentorg)) {
         $prevparent = $currentorg;
     } else {

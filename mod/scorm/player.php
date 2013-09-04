@@ -81,7 +81,7 @@ if (!empty($forcejs)) {
 }
 $collapsetocwinsize = get_config('scorm', 'collapsetocwinsize');
 if (empty($collapsetocwinsize)) {
-    // Set as default window size to collapse TOC
+    // Set as default window size to collapse TOC.
     $collapsetocwinsize = 767;
 } else {
     $collapsetocwinsize = intval($collapsetocwinsize);
