@@ -18,9 +18,10 @@
 #page-mod-scorm-player #scormpage #scorm_object {border: none; width: 98%; height: 98%;}
 #page-mod-scorm-player #scormpage #scorm_object.scorm_nav_under_content {height: 95%;}
 #page-mod-scorm-player #scormpage #scorm_content {height: 100%;}
-#page-mod-scorm-player #scormpage #scorm_toc {position: relative;}
+#page-mod-scorm-player #scormpage #scorm_toc {height: 100%; position: relative;}
 #page-mod-scorm-player #scormpage #scorm_toc_title {font-size: 1.2em; font-weight: bold;}
-#page-mod-scorm-player #scormpage #scorm_tree {border-right: 5px solid rgb(239, 245, 255);}
+#page-mod-scorm-player #scormpage #scorm_tree {border-right: 5px solid rgb(239, 245, 255); height: 100%;}
+#page-mod-scorm-player #scormpage #scorm_tree ul {height: 98%; overflow-y: auto;}
 #page-mod-scorm-player #scormpage #scorm_navpanel {text-align: center;}
 
 #page-mod-scorm-player .toc,
